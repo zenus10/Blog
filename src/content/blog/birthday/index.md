@@ -6,7 +6,7 @@ tags:
   - memory
 language: 'Chinese'
 heroImage: { src: './thumbnail.jpg', color: '#ece5e6ff' }
-draft: false
+draft: true
 comment: false
 ---
 

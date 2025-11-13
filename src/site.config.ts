@@ -7,7 +7,7 @@ export const theme: ThemeUserConfig = {
   /** Will be used in index page & copyright declaration */
   author: 'Zenus10',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'why you see here?',
+  description: 'zenus10的博客',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** Specify the default language for this site. */
