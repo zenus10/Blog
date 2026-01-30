@@ -23,6 +23,6 @@ const { post, posts } = Astro.props
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
-<PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
+<PostLayout description:'关于zenus10' {post} {posts} {headings} {remarkPluginFrontmatter}>
   <Content />
 </PostLayout>

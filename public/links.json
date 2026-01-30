@@ -3,12 +3,6 @@
             "id_name": "common-links",
             "desc": "我的朋友们",
             "link_list": [{
-                    "avatar": "https://nonmirror.icu/image/avatar.jpg",
-                    "name": "Nonmirror",
-                    "intro": "去参加runningman了",
-                    "link": "https://nonmirror.icu/"
-                },
-                {
                     "avatar": "https://s21.ax1x.com/2025/09/05/pV2V56K.jpg",
                     "name": " B3dman",
                     "intro": "北大门淋雨的是谁呢",
@@ -25,6 +19,36 @@
                     "name": " Fw190",
                     "intro": "sa大手子",
                     "link": "https://fw190.top/"
+                },
+                {
+                    "avatar": "https://www.notion.so/image/attachment%3A94be2d9c-52c1-4ce5-8581-1f9da071fccf%3Aaff7b7c276f1e428bfc33f911194dee50a542fbc87d6c6970f3163c67879e28a.png?table=collection&id=2d2c48af-1dcd-8128-b133-000bd73821e5&t=2d2c48af-1dcd-8128-b133-000bd73821e5",
+                    "name": " 楚棠瑜",
+                    "intro": "cty？cty！",
+                    "link": "https://notion-next-dx9u.vercel.app/"
+                },
+                {
+                    "avatar": "https://cantsp3ak.com/img/avatar.jpg",
+                    "name": " 猪猪侠",
+                    "intro": "并非不太会说话",
+                    "link": "https://cantsp3ak.com/"
+                },
+                {
+                    "avatar": "https://shenshenovo.cn/2.jpg",
+                    "name": " 深深",
+                    "intro": "咪咪咪咪咪咪哟",
+                    "link": "https://shenshenovo.cn/"
+                },
+                {
+                    "avatar": "https://dx3906lxr.github.io/img/avatar.jpg",
+                    "name": " 3906",
+                    "intro": "Do not go gentle into that good blog.",
+                    "link": "https://dx3906lxr.github.io/"
+                },
+                {
+                    "avatar": "https://fallenjerry.cn/avatar.jpg",
+                    "name": " Jerry",
+                    "intro": "热爱生活，喜欢音乐",
+                    "link": "https://fallenjerry.cn/"
                 }
 
             ]
