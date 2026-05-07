@@ -40,4 +40,30 @@ const blog = defineCollection({
     })
 })
 
-export const collections = { blog }
+// 定义 books collection
+const books = defineCollection({
+  loader: glob({ base: './src/content/books', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      author: z.string(),
+      dynasty: z.string().optional(),
+      description: z.string(),
+      coverImage: z
+        .object({
+          src: image(),
+          alt: z.string().optional()
+        })
+        .optional(),
+      tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
+      publishDate: z.coerce.date(),
+      type: z.enum(['curated', 'showcase']),
+      favorite: z.boolean().default(false),
+      // 可下载的书籍文档链接（PDF/Word等），放在 public/ 目录下
+      downloadUrl: z.string().optional(),
+      draft: z.boolean().default(false),
+      comment: z.boolean().default(true)
+    })
+})
+
+export const collections = { blog, books }

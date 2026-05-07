@@ -30,6 +30,7 @@ const {
   publishDate,
   title,
   updatedDate,
+  tags,
   draft: isDraft,
   comment: enableComment
 } = data
@@ -41,6 +42,31 @@ const socialImage = heroImage
   : '/images/social-card.png'
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
+
+// JSON-LD structured data for BlogPosting
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: description,
+  image: new URL(socialImage, Astro.site).href,
+  datePublished: publishDate.toISOString(),
+  ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+  author: {
+    '@type': 'Person',
+    name: 'Zenus10',
+    url: new URL('/about', Astro.site).href
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Zenus10'
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, Astro.site).href
+  },
+  ...(tags?.length && { keywords: tags.join(', ') })
+}
 ---
 
 <PageLayout
@@ -65,5 +91,7 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
 </PageLayout>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 {integ.mediumZoom.enable && <MediumZoom />}

@@ -1,5 +1,15 @@
 {
     "friends": [{
+            "id_name": "love-links",
+            "desc": "Love links",
+            "link_list": [{
+                "avatar": "https://psych.green/images/logo.png",
+                "name": " Psych",
+                "intro": "然然๑ ⁃⩊⁃ ๑",
+                "link": "https://psych.green/"
+            }]
+        },
+        {
             "id_name": "common-links",
             "desc": "我的朋友们",
             "link_list": [{
@@ -7,12 +17,6 @@
                     "name": " B3dman",
                     "intro": "北大门淋雨的是谁呢",
                     "link": "https://b3dman.top/"
-                },
-                {
-                    "avatar": "https://psych.green/images/logo.png",
-                    "name": " Psych",
-                    "intro": "你是我唯一的姐",
-                    "link": "https://psych.green/"
                 },
                 {
                     "avatar": "https://pic1.imgdb.cn/item/689de96d58cb8da5c82534bb.jpg",
@@ -49,6 +53,24 @@
                     "name": " Jerry",
                     "intro": "热爱生活，喜欢音乐",
                     "link": "https://fallenjerry.cn/"
+                },
+                {
+                    "avatar": "https://shyker.github.io/img/avatar.jpg",
+                    "name": " Shyker",
+                    "intro": "白色翻译家",
+                    "link": "https://shyker.github.io/"
+                },
+                {
+                    "avatar": "https://avatars.githubusercontent.com/u/183052193?v=4",
+                    "name": " Aut",
+                    "intro": "Auv？noAut",
+                    "link": "https://aut-11.github.io/mysite/splash"
+                },
+                {
+                    "avatar": "https://unavatar.io/twitter/outofdesk",
+                    "name": " Gaurav Ramesh",
+                    "intro": "out.of.desk — essays on growth, software & life",
+                    "link": "https://outofdesk.netlify.app/"
                 }
 
             ]
@@ -62,6 +84,47 @@
             "id_name": "special-links",
             "desc": "我收藏的网站",
             "link_list": []
+        },
+        {
+            "id_name": "collect-links",
+            "desc": "四处收集的优质个人博客",
+            "link_list": [{
+                    "avatar": "https://linguista.cn/img/Avatar5518800_2.jpg",
+                    "name": "Linguista",
+                    "intro": "",
+                    "link": "https://linguista.cn/"
+                },
+                {
+                    "avatar": "https://newimg.t5t6.com/1755628764955-dd051b33-6014-4edb-b365-da1618eb8f3f.png",
+                    "name": "乔木",
+                    "intro": "",
+                    "link": "https://www.qiaomu.ai/"
+                },
+                {
+                    "avatar": "https://ysymyth.github.io/images/self.jpeg",
+                    "name": "Shunyu Yao",
+                    "intro": "",
+                    "link": "https://ysymyth.github.io/"
+                },
+                {
+                    "avatar": "https://nav.al/img/naval-ravikant.webp",
+                    "name": "Naval Ravikant",
+                    "intro": "",
+                    "link": "https://nav.al/"
+                },
+                {
+                    "avatar": "https://s.turbifycdn.com/aah/paulgraham/index-21.gif",
+                    "name": "Paul Graham",
+                    "intro": "",
+                    "link": "https://paulgraham.com/articles.html"
+                },
+                {
+                    "avatar": "https://kevinma2010.net/",
+                    "name": "kevin Ma",
+                    "intro": "",
+                    "link": "https://kevinma2010.net/"
+                }
+            ]
         }
     ]
 }

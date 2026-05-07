@@ -5,7 +5,11 @@ import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
 
-const headings = [{ depth: 2, slug: 'common-links', text: 'Common Links' }]
+const headings = [
+  { depth: 2, slug: 'love-links', text: 'Love Links' },
+  { depth: 2, slug: 'friend-links', text: 'Friend Links' },
+  { depth: 2, slug: 'collect-links', text: 'Collect Links' }
+]
 
 const { friends } = links
 ---
@@ -14,17 +18,14 @@ const { friends } = links
   <p>友链环节</p>
 
   <!-- 我的朋友 -->
-  <h2 id='common-links'>Common Links</h2>
+  <h2 id='love-links'>Love Links</h2>
   <FriendList list={friends[0]} />
 
-  <!-- 状态不佳的友链（折叠） -->
-  {
-    friends[1].link_list.length > 0 && (
-      <Collapse title='Links with Bad Status'>
-        <FriendList list={friends[1]} />
-      </Collapse>
-    )
-  }
+  <h2 id='friend-links'>Friend Links</h2>
+  {friends[1].link_list.length > 0 && <FriendList list={friends[1]} />}
+
+  <h2 id='collect-links'>Collect Links</h2>
+  {friends[4].link_list.length > 0 && <FriendList list={friends[4]} />}
 
   <!-- 我收藏的网站（折叠列表）
   <h2 id='special-links'>Special Links</h2>
@@ -37,3 +38,11 @@ const { friends } = links
     <FriendList list={friends[3]} />
   </Collapse> -->
 </PageLayout>
+
+<script>
+  // Fix negative scroll percentage on short pages
+  document.addEventListener('scroll', () => {
+    const el = document.querySelector('#to-top-btn .text') as HTMLElement
+    if (el && parseInt(el.innerText) < 0) el.innerText = '0'
+  })
+</script>

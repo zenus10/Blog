@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import { cn } from 'astro-pure/utils'
+
+interface Props {
+  class?: string
+  book: CollectionEntry<'books'>
+}
+
+const { class: className, book } = Astro.props
+const { title, author, dynasty, description, coverImage, type } = book.data
+---
+
+<a
+  href={`/books/${book.id}`}
+  class={cn('group flex flex-col overflow-hidden rounded-xl border no-underline transition-colors hover:border-foreground/25', className)}
+>
+  {/* 封面区域 */}
+  <div class='relative aspect-[3/4] w-full overflow-hidden bg-muted'>
+    {coverImage ? (
+      <Image
+        class='m-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
+        src={coverImage.src}
+        alt={coverImage.alt || title}
+        loading='lazy'
+      />
+    ) : (
+      <div class='flex h-full items-center justify-center text-2xl font-bold text-muted-foreground/30'>
+        {title.charAt(0)}
+      </div>
+    )}
+    {type === 'curated' && (
+      <span class='absolute start-2 top-2 rounded-md bg-primary/90 px-1.5 py-0.5 text-xs text-white'>
+        已整理
+      </span>
+    )}
+  </div>
+
+  {/* 信息区域 */}
+  <div class='flex flex-col gap-y-1 px-3 py-2.5'>
+    <span class='line-clamp-1 text-sm font-medium text-foreground'>
+      {title}
+    </span>
+    <span class='text-xs text-muted-foreground'>
+      {dynasty ? `【${dynasty}】${author}` : author}
+    </span>
+    <span class='line-clamp-2 text-xs leading-snug text-muted-foreground/70'>
+      {description}
+    </span>
+  </div>
+</a>

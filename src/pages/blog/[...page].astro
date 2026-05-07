@@ -29,7 +29,7 @@ interface Props {
 const { page, uniqueTags, collectionsCount } = Astro.props
 
 const meta = {
-  description: 'Some posts or archives of my blog',
+  description: 'Zenus10的博客文章列表 - 技术开发、信息安全笔记与文学随笔',
   title: 'Blog'
 }
 
@@ -50,6 +50,8 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
+  {page.url.prev && <link rel='prev' href={new URL(page.url.prev, Astro.site).href} slot='head' />}
+  {page.url.next && <link rel='next' href={new URL(page.url.next, Astro.site).href} slot='head' />}
   <Button title='Back' href='/' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>

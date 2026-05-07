@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx astro build:*)",
+      "Bash(wc:*)",
+      "Bash(cat /d/ENTER/blog/astro-theme-pure/src/pages/blog/[...page].astro)",
+      "Bash(Invoke-WebRequest -Uri \"https://opengraph.githubassets.com/1/zenus10/PreUser\" -OutFile \"d:\\\\ENTER\\\\blog\\\\astro-theme-pure\\\\src\\\\assets\\\\projects\\\\preuser.png\" -UseBasicParsing)",
+      "Bash(Write-Host \"Done\")"
+    ]
+  }
+}

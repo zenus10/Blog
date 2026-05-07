@@ -1,9 +1,11 @@
 ---
 title: '基于astro和netlify的个人博客部署过程'
 publishDate: 2025-10-13
-description: '采用Astro框架+Pure Theme，使用GitHub+Netlify部署的本站建站过程'
+description: '详细记录使用Astro框架和Pure Theme搭建个人博客，并通过GitHub和Netlify完成自动化部署的完整建站过程'
 tags:
-  - Blog
+  - astro
+  - netlify
+  - dev
 language: 'Chinese'
 heroImage: { src: './thumbnail.jpg', color: '#003cffff' }
 draft: false

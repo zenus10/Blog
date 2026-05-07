@@ -6,20 +6,22 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon, Label, Steps } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
+import SkillLayout from '@/components/home/SkillLayout.astro'
 import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
 
-const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
-const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
-const backend = ['Vercel', 'Waline']
+const Handson = ['painting', 'crafting', 'makeup', 'calligraphy', 'photography']
+const Expressive = ['writing', 'talking', 'painting', 'photography']
+const Intellectual = ['novels', 'music', 'podcasts and long videos', 'Brainstorming']
 
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
+<PageLayout meta={{ title: 'Home' }} highlightColor='#bfb0a0'>
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image
@@ -44,14 +46,12 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
       <Section title='About'>
-        <p class='text-muted-foreground'>Hi!Here is Zenus10👋🏻</p>
+        <p class='text-muted-foreground'>Hi! I'm Zenus10, you can also call me z10</p>
+
         <p class='text-muted-foreground'>
-          “Each man had only one genuine vocation - to find the way to himself....His task was to
-          discover his own destiny - not an arbitrary one - and to live it out wholly and resolutely
-          within himself. Everything else was only a would-be existence, an attempt at evasion, a
-          flight back to the ideals of the masses, conformity and fear of one's own inwardness.”<br
-          /> ― Herman Hesse
+          “我经由光阴，经由山水，经由乡村和城市，同样我也经由别人，经由一切他者以及由之引生的思绪和梦想而走成了我。那路途中的一切，有些与我擦肩而过从此天各一方，有些便永久驻进我的心魂，雕琢我，塑造我，锤炼我，融入我而成为我。”
         </p>
+
         <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
       </Section>
       {
@@ -115,6 +115,35 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         </ul> */
           }
         </Card>
+      </Section>
+
+      <Section title='Website List'>
+        <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+          <ProjectCard
+            href='https://haizi.zenus10.com'
+            heading='Haizipoemes'
+            subheading='海子个人纪念网站'
+            imagePath='/src/assets/projects/haizi.png'
+          />
+          <ProjectCard
+            href='https://github.com/zenus10/PreUser'
+            heading='PreUser'
+            subheading='GitHub'
+            imagePath='/src/assets/projects/preuser.png'
+          />
+          <ProjectCard
+            href='https://github.com/zenus10/prompt-ab-test'
+            heading='prompt-ab-test'
+            subheading='Prompt A/B Testing Tool'
+            imagePath='/src/assets/projects/prompt-ab-test.png'
+          />
+        </div>
+      </Section>
+
+      <Section title='Hobbies'>
+        <SkillLayout title='Create' skills={Handson} />
+        <SkillLayout title='Expressive' skills={Expressive} />
+        <SkillLayout title='Intellectual' skills={Intellectual} />
       </Section>
     </div>
   </main>

@@ -1,0 +1,38 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+
+const headings = [
+  { depth: 2, slug: 'programs', text: 'Programs' }
+]
+---
+
+<PageLayout title='Projects' {headings}>
+  <h2 id='programs'>Programs</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'Haizipoemes',
+        description: '海子个人纪念网站',
+        links: [
+          { type: 'site', href: 'https://haizi.zenus10.com' },
+          { type: 'github', href: 'https://github.com/zenus10/haizipoemes' }
+        ]
+      },
+      {
+        name: 'prompt-ab-test',
+        description: 'Prompt A/B Testing Tool',
+        links: [
+          { type: 'github', href: 'https://github.com/zenus10/prompt-ab-test' }
+        ]
+      },
+      {
+        name: 'PreUser',
+        description: 'PreUser',
+        links: [
+          { type: 'github', href: 'https://github.com/zenus10/PreUser' }
+        ]
+      }
+    ]}
+  />
+</PageLayout>

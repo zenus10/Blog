@@ -4,14 +4,51 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
 
 const headings = [
-  { depth: 2, slug: 'social', text: 'Social' },
-  { depth: 2, slug: 'about-blog', text: 'About Blog' }
+  { depth: 2, slug: 'about-me', text: 'AboutMe' },
+
+  { depth: 2, slug: 'social', text: 'Social' }
 ]
 ---
 
 <PageLayout title='About' description:'关于zenus10' {headings} comment>
-  <p>Developer / Designer</p>
-  <p>你好， 我是zenus10, 你也可以叫我z10,很高兴认识你!</p>
+  <p>你好👋 我是zenus10，你也可以叫我z10</p>
+
+  <blockquote>
+    <p><strong>名字的由来:</strong></p>
+    <p>
+      因为守护星是金星，本人八字也是极强的金命，所以偏爱金星<strong>Venus</strong
+      >。又根据本人的名字微调了一下，最后便是<strong>Zenus10</strong>~
+    </p>
+    <p>z10、zen、10都和我的真名读起来很像，所以大家也都这么叫我啦 :3 (叫z10的比较多)</p>
+  </blockquote>
+
+  <p>苦于不知道怎么写about，于是就根据小红书上找到的一篇自我说明书书写指南作为框架展开</p>
+
+  <h2 id='about-me'>AboutMe</h2>
+
+  <p>zenus10，作息比较诡异的神秘女子，在晚上比较活跃。需要独处充电，更倾向于熟人社交的i人。</p>
+
+  <p>
+    现外表是一位黑发根很长的前金发女子。折腾过粉发、银发、金发、棕发、红色挑染，最喜欢的是粉发oᴗoᐝ。打过舌钉与眉钉，前者喝酒喝丢了，后者嫌麻烦摘了。无缘由地喜欢珍珠首饰。
+  </p>
+
+  <p>
+    太阳星座和上升星座都是天秤座，月亮星座是射手座。mbti是intp，是比较符合intp刻板印象的，但我的风风火火的星座反而弥补了这一点（）
+  </p>
+
+  <p>
+    最明显的优势是比较擅长创造性工作/爱好，如画画、写作、练字、摄影、手工、设计等。另外比较喜欢收集，例如收电子书、买花、攒酒瓶子等会让人有点亮图鉴感的收集癖行为。比较长情的游戏是mc，爱玩创造建小而美房子。
+  </p>
+
+  <p>
+    劣势的话，我要提名一个对我生活影响比较大的，就是我对外界具体事物的感知力较低。这样说可能比较抽象，具体表现为我会因为出于内部秩序敏感而感到莫名其妙的烦躁，然后发现原来我一天没吃饭😴
+  </p>
+
+  <p>我认为一个人最珍贵的品质是可能性。</p>
+
+  <p>
+    最美妙的状态就是在自己安全舒适的小屋里，轻松地放喜欢的视频，然后画画，还有实现自己的奇思妙想💬
+  </p>
 
   {/* social-networks */}
   <h2 id='social'>Social</h2>
@@ -33,16 +70,4 @@ const headings = [
       { date: 'Tiktok:', content: 'Zenus10' }
     ]}
   />
-
-  {/* about-blog */}
-  <h2 id='about-blog'>About Blog</h2>
-  <ul>
-    <li>
-      <h5>Content</h5><br /> 待补充。。。
-    </li>
-    <br />
-    <li>
-      <h5>Wish</h5><br />希望我和我的小博客一起进步！
-    </li>
-  </ul>
 </PageLayout>

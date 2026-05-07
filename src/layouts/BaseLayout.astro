@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
@@ -24,6 +25,8 @@ const {
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
+    <ClientRouter />
+    <slot name='head' />
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>

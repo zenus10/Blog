@@ -1,0 +1,82 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+
+import { TOC } from 'astro-pure/components/pages'
+import { Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/ContentLayout.astro'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const books = await getCollection('books', ({ data }) => !data.draft)
+  return books.map((book) => ({
+    params: { id: book.id },
+    props: { book }
+  }))
+}
+
+type Props = {
+  book: CollectionEntry<'books'>
+}
+
+const { book } = Astro.props
+const { title, author, dynasty, description, type, coverImage, downloadUrl } = book.data
+const { Content, headings } = await render(book)
+const hasContent = headings.length > 0
+---
+
+<PageLayout
+  meta={{ title, description }}
+  back='/books'
+>
+  {hasContent && <TOC {headings} slot='sidebar' />}
+
+  <Fragment slot='header'>
+    <div class='flex gap-x-6 sm:gap-x-8'>
+      {/* 封面图 */}
+      {coverImage && (
+        <div class='shrink-0'>
+          <Image
+            class='m-0 w-36 rounded-lg border object-cover shadow-md sm:w-48'
+            src={coverImage.src}
+            alt={coverImage.alt || title}
+            loading='eager'
+          />
+        </div>
+      )}
+
+      {/* 书籍信息 */}
+      <div class='flex flex-col justify-center gap-y-1.5'>
+        <div class='flex items-center gap-x-2'>
+          <h1 class='text-2xl font-medium sm:text-3xl'>{title}</h1>
+          {type === 'curated' && (
+            <span class='shrink-0 rounded-md bg-primary/10 px-2 py-1 text-sm text-primary'>
+              已整理
+            </span>
+          )}
+        </div>
+        <div class='text-muted-foreground'>
+          {dynasty ? `【${dynasty}】${author}` : author}
+        </div>
+        <p class='text-sm text-muted-foreground/80'>{description}</p>
+
+        {/* 下载按钮 */}
+        {downloadUrl && (
+          <a
+            href={downloadUrl}
+            download
+            class='mt-1 inline-flex w-fit items-center gap-x-1.5 rounded-lg border bg-muted px-3 py-1.5 text-sm text-foreground no-underline transition-colors hover:border-foreground/25'
+          >
+            <Icon class='size-4' name='document' />
+            下载书籍
+          </a>
+        )}
+      </div>
+    </div>
+  </Fragment>
+
+  {hasContent && (
+    <Content />
+  )}
+</PageLayout>
