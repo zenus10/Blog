@@ -1,15 +1,5 @@
 {
     "friends": [{
-            "id_name": "love-links",
-            "desc": "Love links",
-            "link_list": [{
-                "avatar": "https://psych.green/images/logo.png",
-                "name": " Psych",
-                "intro": "然然๑ ⁃⩊⁃ ๑",
-                "link": "https://psych.green/"
-            }]
-        },
-        {
             "id_name": "common-links",
             "desc": "我的朋友们",
             "link_list": [{
@@ -67,12 +57,41 @@
                     "link": "https://aut-11.github.io/mysite/splash"
                 },
                 {
-                    "avatar": "https://unavatar.io/twitter/outofdesk",
-                    "name": " Gaurav Ramesh",
-                    "intro": "out.of.desk — essays on growth, software & life",
-                    "link": "https://outofdesk.netlify.app/"
+                    "avatar": "https://unavatar.io/deepunk.icu",
+                    "name": " deepunk",
+                    "intro": "神秘剪刀手",
+                    "link": "https://deepunk.icu"
+                },
+                {
+                    "avatar": "https://www.sh1no.icu/avr.png",
+                    "name": " shino",
+                    "intro": "师奶",
+                    "link": "https://sh1no.icu"
+                },
+                {
+                    "avatar": "https://unavatar.io/timlzh.com",
+                    "name": " tim",
+                    "intro": "俞琳高手",
+                    "link": "https://timlzh.com/"
+                },
+                {
+                    "avatar": "https://unavatar.io/cyril07.wiki",
+                    "name": " cyril",
+                    "intro": "这个名字咋念",
+                    "link": "https://cyril07.wiki/"
+                },
+                {
+                    "avatar": "https://unavatar.io/fanllspd.com",
+                    "name": " fanllspd",
+                    "intro": "何妨吟啸且徐行",
+                    "link": "https://fanllspd.com/"
+                },
+                {
+                    "avatar": "https://unavatar.io/yuuk1.top",
+                    "name": " yukii",
+                    "intro": "鱼ki",
+                    "link": "https://yuuk1.top/"
                 }
-
             ]
         },
         {
@@ -89,6 +108,12 @@
             "id_name": "collect-links",
             "desc": "四处收集的优质个人博客",
             "link_list": [{
+                    "avatar": "https://unavatar.io/twitter/outofdesk",
+                    "name": " Gaurav Ramesh",
+                    "intro": "out.of.desk — essays on growth, software & life",
+                    "link": "https://outofdesk.netlify.app/"
+                },
+                {
                     "avatar": "https://linguista.cn/img/Avatar5518800_2.jpg",
                     "name": "Linguista",
                     "intro": "",

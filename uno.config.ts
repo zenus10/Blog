@@ -11,7 +11,7 @@ const bgMuted = 'hsl(var(--muted) / var(--un-bg-opacity, 1))'
 const typographyConfig = {
   cssExtend: {
     // Title
-    'h2,h3,h4,h5,h6': {
+    'h1,h2,h3,h4,h5,h6': {
       'scroll-margin-top': '3rem',
       'font-weight': '500',
       color: fg
@@ -40,6 +40,7 @@ const typographyConfig = {
       'border-radius': 'var(--radius)',
       'padding-inline': '1.6rem',
       'box-shadow': '0 5px 0 ' + bgMuted,
+      color: fg,
       ...(typographyCustom.blockquoteStyle === 'normal' && { 'font-style': 'normal' })
     },
     'blockquote::after': {
@@ -98,7 +99,8 @@ const typographyConfig = {
         padding: '0.3em 0.5em',
         border: '1px solid hsl(var(--border) / 1)',
         'border-radius': 'var(--radius)',
-        'background-color': 'hsl(var(--muted) / var(--un-bg-opacity, 1))'
+        'background-color': 'hsl(var(--muted) / var(--un-bg-opacity, 1))',
+        color: fg
       },
       ':not(pre)>code::before,:not(pre)>code::after': {
         content: 'none'

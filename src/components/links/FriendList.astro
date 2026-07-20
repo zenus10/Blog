@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+const DEFAULT_AVATAR = '/avts/moren.jpg'
 
 interface friend {
   avatar: string
@@ -37,13 +37,14 @@ const { title, list: friendList, ...props } = Astro.props
             <div class='relative z-10 flex h-full items-center gap-3'>
               {/* avatar */}
               <div class='relative h-14 w-14 min-w-14 overflow-hidden rounded-full'>
-                <Image
-                  class='my-0 bg-white'
-                  src={frd.avatar}
+                <img
+                  class='my-0 bg-white h-full w-full object-cover'
+                  src={frd.avatar || DEFAULT_AVATAR}
                   height={80}
                   width={80}
                   alt='avatar'
                   loading='lazy'
+                  data-fallback={DEFAULT_AVATAR}
                 />
                 <div class='absolute start-0 top-0 h-full w-full'>
                   <div class='flex h-full w-full items-center justify-center rounded-full bg-foreground opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-50'>
@@ -80,13 +81,14 @@ const { title, list: friendList, ...props } = Astro.props
               </div>
             </div>
             {/* avatar bg */}
-            <Image
+            <img
               class='absolute -start-2 top-0 z-0 my-0 h-full w-2/3 bg-white object-cover opacity-15'
-              src={frd.avatar}
+              src={frd.avatar || DEFAULT_AVATAR}
               height={80}
               width={80}
               alt='avatar bg'
               loading='lazy'
+              data-fallback={DEFAULT_AVATAR}
               style={{
                 maskImage: 'linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
                 msMaskImage:
@@ -103,3 +105,13 @@ const { title, list: friendList, ...props } = Astro.props
     )
   }
 </div>
+
+<script>
+  document.querySelectorAll<HTMLImageElement>('img[data-fallback]').forEach((img) => {
+    const fallback = img.dataset.fallback!
+    img.addEventListener('error', () => {
+      if (img.src.endsWith(fallback)) return
+      img.src = fallback
+    })
+  })
+</script>
