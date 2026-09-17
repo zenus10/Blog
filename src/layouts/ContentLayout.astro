@@ -52,12 +52,12 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
     </article>
   </main>
 
-  <div class='bottom mt-6 items-start gap-x-10 md:flex'>
+  <div class='bottom mt-6 min-w-0 max-w-full items-start gap-x-10 md:flex'>
     {/* Bottom */}
-    <div class='flex-1 text-muted-foreground md:min-w-[50ch]'>
+    <div class='min-w-0 max-w-full flex-1 text-muted-foreground md:min-w-[50ch]'>
       <slot name='bottom' />
     </div>
-    <div class='min-w-48 basis-60'>
+    <div class='min-w-0 max-w-full basis-60 md:min-w-48'>
       <slot name='bottom-sidebar' />
     </div>
   </div>

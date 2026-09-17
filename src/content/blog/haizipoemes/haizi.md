@@ -1,5 +1,5 @@
 ---
-title: 'The Haizi_website'
+title: '海子的诗——海子个人纪念网站的搭建'
 publishDate: 2026-02-26
 description: '战战战我嗒嗒嗒'
 tags:

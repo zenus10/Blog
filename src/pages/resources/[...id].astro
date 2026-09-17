@@ -1,0 +1,103 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content'
+
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import BookResourceList from '@/components/resources/BookResourceList.astro'
+import ResourceGroup from '@/components/resources/ResourceGroup.astro'
+import ResourceWorkspace from '@/components/resources/ResourceWorkspace.astro'
+import { getResourceGroups, type ResolvedResourceGroup } from '@/utils/resources'
+
+export const prerender = true
+
+interface ResourceNavItem {
+  id: string
+  title: string
+  count: number
+}
+
+interface ResourceProps {
+  kind: 'resource'
+  group: ResolvedResourceGroup
+  items: ResourceNavItem[]
+  bookCount: number
+}
+
+interface BooksProps {
+  kind: 'books'
+  books: CollectionEntry<'books'>[]
+  items: ResourceNavItem[]
+  bookCount: number
+}
+
+export async function getStaticPaths() {
+  const [groups, bookEntries] = await Promise.all([
+    getResourceGroups(),
+    getCollection('books', ({ data }) => !data.draft)
+  ])
+  const books = bookEntries.sort((a, b) => {
+    const favoriteDifference = Number(b.data.favorite) - Number(a.data.favorite)
+    if (favoriteDifference !== 0) return favoriteDifference
+    return b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+  })
+  const items = groups.map((group) => ({
+    id: group.entry.id,
+    title: group.entry.data.title,
+    count: group.items.length
+  }))
+  const bookCount = books.length
+
+  return [
+    ...groups.map((group) => ({
+      params: { id: group.entry.id },
+      props: { kind: 'resource', group, items, bookCount } satisfies ResourceProps
+    })),
+    {
+      params: { id: 'books' },
+      props: { kind: 'books', books, items, bookCount } satisfies BooksProps
+    }
+  ]
+}
+
+const props = Astro.props as ResourceProps | BooksProps
+const selectedTitle = props.kind === 'resource' ? props.group.entry.data.title : 'Books'
+const meta = {
+  title: `${selectedTitle} Resources`,
+  description:
+    props.kind === 'resource'
+      ? props.group.entry.data.description || '按主题整理的网站、文档、工具与课程资源'
+      : '喜欢的书、书摘与已经整理的阅读资源'
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/' variant='back' />
+
+  <main class='mt-6 lg:mt-10'>
+    <header id='content-header' class='animate mb-10'>
+      <p class='mb-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground'>
+        Library
+      </p>
+      <h1 class='text-3xl font-medium'>Resources</h1>
+      <p class='mt-3 max-w-2xl text-sm leading-6 text-muted-foreground'>
+        按用途整理的网站、工具、文档和阅读资料。
+      </p>
+    </header>
+
+    <div id='content' class='animate'>
+      <ResourceWorkspace
+        items={props.items}
+        activeId={props.kind === 'resource' ? props.group.entry.id : 'books'}
+        bookCount={props.bookCount}
+      >
+        {
+          props.kind === 'resource' ? (
+            <ResourceGroup group={props.group} />
+          ) : (
+            <BookResourceList books={props.books} />
+          )
+        }
+      </ResourceWorkspace>
+    </div>
+  </main>
+</PageLayout>

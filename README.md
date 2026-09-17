@@ -131,6 +131,34 @@ draft: false
 | `draft` | 否 | 是否为草稿（默认 false） |
 | `comment` | 否 | 是否开启评论（默认 true） |
 
+## 资源分类格式
+
+资源按分类维护。在 `src/content/resources/` 下为每个分类创建一个 Markdown 文件，例如 `ai.md`：
+
+```markdown
+---
+title: 'AI 与 LLM'
+description: '模型文档、学习材料与常用工具'
+order: 10
+draft: false
+items:
+  - title: 'Anthropic Documentation'
+    href: 'https://docs.anthropic.com/'
+    description: 'Claude API 与 Agent 开发文档'
+    kind: document
+  - title: '本地学习资料'
+    href: '/files/llm-notes.pdf'
+    description: '整理后的 PDF 笔记'
+    kind: document
+---
+```
+
+`href` 支持 `http://`、`https://` 外链和 `/` 开头的站内文件路径。
+
+资源类型 `kind` 可选值为 `website`、`document`、`tool`、`course`、`other`。同一链接不能在多个分类中重复出现。
+
+现有书籍继续在 `src/content/books/` 中维护，并作为 `/resources/books` 的平级资源分类展示。`/books` 会跳转到该分类，原有 `/books/<id>` 详情页、书摘和下载链接保持可用。
+
 ## 配置说明
 
 ### 站点配置

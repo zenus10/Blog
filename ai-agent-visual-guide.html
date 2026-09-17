@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>深入理解 AI Agent · 知识可视化展馆</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6fb;
+      --ink: #142035;
+      --muted: #5b6980;
+      --line: rgba(20, 32, 53, 0.10);
+      --panel: rgba(255,255,255,0.76);
+      --panel-strong: rgba(255,255,255,0.92);
+      --blue: #3366ff;
+      --teal: #11a7a2;
+      --gold: #d59d39;
+      --violet: #735cff;
+      --rose: #c36d6d;
+      --shadow: 0 24px 60px rgba(20, 32, 53, 0.12);
+      --radius: 26px;
+      --radius-sm: 18px;
+      --max: 1360px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(51,102,255,0.12), transparent 28%),
+        radial-gradient(circle at 100% 10%, rgba(17,167,162,0.10), transparent 24%),
+        linear-gradient(180deg, #f8f9fc 0%, #eef2f8 100%);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(var(--max), calc(100vw - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(16px);
+      background: rgba(244,246,251,0.82);
+      border-bottom: 1px solid rgba(20, 32, 53, 0.08);
+    }
+
+    .topbar-inner {
+      width: min(var(--max), calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      background: conic-gradient(from 180deg, var(--blue), var(--teal), var(--gold), var(--violet), var(--blue));
+      box-shadow: 0 12px 26px rgba(51,102,255,0.18);
+    }
+
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1.5px solid rgba(255,255,255,0.76);
+      border-radius: 10px;
+      transform: rotate(45deg);
+    }
+
+    .mark::after {
+      inset: 15px;
+      border-style: dashed;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .nav a,
+    .filter,
+    .chapter-node,
+    .chapter-card,
+    .tab {
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .nav a,
+    .filter,
+    .tab {
+      text-decoration: none;
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .nav a:hover,
+    .filter:hover,
+    .filter.active,
+    .tab:hover,
+    .tab.active,
+    .chapter-node:hover,
+    .chapter-node.active,
+    .chapter-card:hover,
+    .chapter-card.active {
+      transform: translateY(-1px);
+      border-color: rgba(51,102,255,0.34);
+      box-shadow: 0 12px 24px rgba(51,102,255,0.10);
+    }
+
+    main { padding: 28px 0 84px; }
+    section { margin-top: 26px; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-inner { padding: 30px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(51,102,255,0.10);
+      border: 1px solid rgba(51,102,255,0.14);
+      color: var(--blue);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1,
+    .section-title,
+    .detail-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      max-width: 11ch;
+    }
+
+    .hero p,
+    .section-desc,
+    .muted,
+    .caption,
+    .chapter-card p,
+    .theme-card p,
+    .axis-card p,
+    .detail-body p,
+    .stream-card p,
+    .catalog-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-copy {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero-copy::before {
+      content: "EXHIBITION MODE";
+      position: absolute;
+      top: 26px;
+      right: 26px;
+      color: rgba(20, 32, 53, 0.20);
+      font-size: 11px;
+      letter-spacing: 0.32em;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .stat span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat strong {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 500px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(51,102,255,0.14), transparent 28%),
+        radial-gradient(circle at 0% 100%, rgba(195,109,109,0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.70), rgba(244,246,251,0.92));
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(20,32,53,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20,32,53,0.05) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.88), transparent);
+      pointer-events: none;
+    }
+
+    .hero-visual svg,
+    .graph svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hero-node,
+    .chapter-node {
+      position: absolute;
+      border: 1px solid rgba(20, 32, 53, 0.10);
+      background: rgba(255,255,255,0.90);
+      box-shadow: 0 18px 34px rgba(20, 32, 53, 0.10);
+    }
+
+    .hero-node {
+      width: 112px;
+      min-height: 112px;
+      border-radius: 24px;
+      padding: 14px;
+    }
+
+    .hero-node strong,
+    .chapter-node strong,
+    .axis-card strong,
+    .theme-card strong,
+    .stream-card strong,
+    .catalog-card strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .hero-node span,
+    .chapter-node span {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-node.n1 { top: 62px; left: 56px; }
+    .hero-node.n2 { top: 52px; right: 72px; }
+    .hero-node.n3 { bottom: 52px; left: 94px; }
+    .hero-node.n4 { bottom: 46px; right: 58px; }
+
+    .hero-hub {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 184px;
+      height: 184px;
+      border-radius: 42px;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(51,102,255,0.16), rgba(17,167,162,0.12), rgba(213,157,57,0.14));
+      border: 1px solid rgba(51,102,255,0.18);
+      box-shadow: 0 18px 38px rgba(51,102,255,0.14);
+    }
+
+    .hero-hub strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-title { font-size: clamp(30px, 4vw, 48px); }
+    .section-desc { max-width: 60ch; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      background: rgba(255,255,255,0.72);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .blue { background: var(--blue); }
+    .teal { background: var(--teal); }
+    .gold { background: var(--gold); }
+    .violet { background: var(--violet); }
+    .rose { background: var(--rose); }
+
+    .graph-wrap {
+      display: grid;
+      grid-template-columns: 1.14fr 0.86fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .graph {
+      position: relative;
+      min-height: 760px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(51,102,255,0.10), transparent 26%),
+        linear-gradient(180deg, rgba(255,255,255,0.70), rgba(247,249,252,0.92));
+    }
+
+    .graph::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(20,32,53,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20,32,53,0.05) 1px, transparent 1px);
+      background-size: 38px 38px;
+      pointer-events: none;
+    }
+
+    .cluster {
+      position: absolute;
+      z-index: 2;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      background: rgba(255,255,255,0.82);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .cluster.c1 { top: 18px; left: 18px; }
+    .cluster.c2 { top: 18px; right: 18px; }
+    .cluster.c3 { bottom: 18px; left: 18px; }
+    .cluster.c4 { bottom: 18px; right: 18px; }
+
+    .chapter-node {
+      width: 168px;
+      min-height: 118px;
+      border-radius: 22px;
+      padding: 16px;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .chapter-node::before {
+      content: attr(data-no);
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1;
+      color: rgba(20,32,53,0.12);
+    }
+
+    .chapter-node[data-group="foundation"] { box-shadow: 0 18px 34px rgba(51,102,255,0.10); }
+    .chapter-node[data-group="core"] { box-shadow: 0 18px 34px rgba(17,167,162,0.10); }
+    .chapter-node[data-group="training"] { box-shadow: 0 18px 34px rgba(213,157,57,0.12); }
+    .chapter-node[data-group="application"] { box-shadow: 0 18px 34px rgba(115,92,255,0.10); }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .detail-panel {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .detail-card,
+    .stream-card,
+    .axis-card,
+    .theme-card,
+    .catalog-card {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid rgba(20, 32, 53, 0.08);
+      background: rgba(255,255,255,0.78);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-title { font-size: 30px; }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(20, 32, 53, 0.05);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    .detail-body {
+      display: grid;
+      gap: 12px;
+    }
+
+    .axis-grid,
+    .stream-grid,
+    .theme-grid,
+    .catalog-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .axis-grid { grid-template-columns: repeat(4, 1fr); }
+    .stream-grid { grid-template-columns: repeat(3, 1fr); }
+    .theme-grid { grid-template-columns: repeat(3, 1fr); }
+    .catalog-grid { grid-template-columns: repeat(5, 1fr); }
+
+    .axis-card { min-height: 210px; }
+    .theme-card { min-height: 184px; }
+    .stream-card { min-height: 180px; }
+    .catalog-card { min-height: 150px; }
+
+    .tone-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(20,32,53,0.08);
+      margin: 14px 0 12px;
+      overflow: hidden;
+    }
+
+    .tone-bar span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .graph-wrap,
+      .axis-grid,
+      .stream-grid,
+      .theme-grid,
+      .catalog-grid,
+      .hero-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .graph-wrap { grid-template-columns: 1fr; }
+      .axis-grid { grid-template-columns: repeat(2, 1fr); }
+      .stream-grid { grid-template-columns: repeat(2, 1fr); }
+      .theme-grid { grid-template-columns: repeat(2, 1fr); }
+      .catalog-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner,
+      .section-head { display: block; }
+      .nav { margin-top: 14px; justify-content: flex-start; }
+      .hero,
+      .hero-grid,
+      .axis-grid,
+      .stream-grid,
+      .theme-grid,
+      .catalog-grid { grid-template-columns: 1fr; }
+      .panel-inner { padding: 20px; }
+      .graph { min-height: 1120px; }
+      .catalog-grid { grid-template-columns: 1fr; }
+      .chapter-node { width: 150px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <strong>深入理解 AI Agent · 知识可视化展馆</strong>
+          <span>章节关系网、结构坐标系、主题流和章节展墙</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#graph">关系网</a>
+        <a href="#axes">结构轴</a>
+        <a href="#themes">主题流</a>
+        <a href="#catalog">章节展墙</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <article class="panel hero-copy">
+        <div class="panel-inner">
+          <div class="eyebrow">knowledge visualization exhibition</div>
+          <h1>一本书，<br>重排为一座<br>知识展馆。</h1>
+          <p>《深入理解 AI Agent：设计原理与工程实践》在这里被拆成四个主展区：定义、构建、形成、扩展。页面不再围绕学习路径组织，而是围绕关系、层次、聚类和结构位置组织。</p>
+          <div class="hero-grid">
+            <div class="stat"><span>页数</span><strong>309</strong></div>
+            <div class="stat"><span>章节</span><strong>10</strong></div>
+            <div class="stat"><span>主展区</span><strong>4</strong></div>
+            <div class="stat"><span>关系类型</span><strong>6+</strong></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel hero-visual">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M18,28 C34,24 42,36 50,50" fill="none" stroke="rgba(51,102,255,0.30)" stroke-width="0.65" />
+          <path d="M82,26 C68,28 60,38 50,50" fill="none" stroke="rgba(17,167,162,0.30)" stroke-width="0.65" />
+          <path d="M24,82 C36,72 42,62 50,50" fill="none" stroke="rgba(213,157,57,0.30)" stroke-width="0.65" />
+          <path d="M80,80 C68,68 58,60 50,50" fill="none" stroke="rgba(115,92,255,0.30)" stroke-width="0.65" />
+          <path d="M18,28 C46,12 66,14 82,26" fill="none" stroke="rgba(20,32,53,0.12)" stroke-width="0.45" stroke-dasharray="1.2 1.2" />
+          <path d="M24,82 C48,90 64,90 80,80" fill="none" stroke="rgba(20,32,53,0.12)" stroke-width="0.45" stroke-dasharray="1.2 1.2" />
+        </svg>
+        <div class="hero-node n1"><strong>定义层</strong><span>对象与术语</span></div>
+        <div class="hero-node n2"><strong>构建层</strong><span>上下文、记忆、工具、代码</span></div>
+        <div class="hero-node n3"><strong>形成层</strong><span>评估、训练、进化</span></div>
+        <div class="hero-node n4"><strong>扩展层</strong><span>多模态与协作</span></div>
+        <div class="hero-hub"><div><strong>Agent</strong>作为中心对象，被整本书从不同方向分层描述。</div></div>
+      </article>
+    </section>
+
+    <section id="graph">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">章节关系网</h2>
+          <p class="section-desc">节点表示章节，位置表示其结构角色。实线是直接延展与依赖，虚线是跨层呼应。右侧展签显示当前节点的网络身份。</p>
+        </div>
+        <div class="legend">
+          <span class="key"><span class="dot blue"></span>定义层</span>
+          <span class="key"><span class="dot teal"></span>构建层</span>
+          <span class="key"><span class="dot gold"></span>形成层</span>
+          <span class="key"><span class="dot violet"></span>扩展层</span>
+        </div>
+      </div>
+
+      <div class="filters" aria-label="章节分区筛选">
+        <button class="filter active" data-filter="all">全部</button>
+        <button class="filter" data-filter="foundation">定义层</button>
+        <button class="filter" data-filter="core">构建层</button>
+        <button class="filter" data-filter="training">形成层</button>
+        <button class="filter" data-filter="application">扩展层</button>
+      </div>
+
+      <div class="graph-wrap">
+        <article class="panel graph" id="graphCanvas">
+          <div class="cluster c1">定义层</div>
+          <div class="cluster c2">构建层</div>
+          <div class="cluster c3">形成层</div>
+          <div class="cluster c4">扩展层</div>
+
+          <svg viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
+            <g id="edges">
+              <path data-edge="1-2" d="M204,146 C312,118 392,110 528,120" fill="none" stroke="rgba(51,102,255,0.32)" stroke-width="4" />
+              <path data-edge="1-4" d="M224,196 C328,226 420,254 530,312" fill="none" stroke="rgba(51,102,255,0.18)" stroke-width="3" stroke-dasharray="10 10" />
+              <path data-edge="2-3" d="M624,136 C678,166 706,218 710,272" fill="none" stroke="rgba(17,167,162,0.32)" stroke-width="4" />
+              <path data-edge="2-4" d="M588,166 C594,214 598,260 602,308" fill="none" stroke="rgba(17,167,162,0.32)" stroke-width="4" />
+              <path data-edge="2-5" d="M538,178 C500,258 466,328 434,408" fill="none" stroke="rgba(17,167,162,0.24)" stroke-width="3.5" />
+              <path data-edge="3-4" d="M678,338 C642,332 622,328 592,324" fill="none" stroke="rgba(17,167,162,0.20)" stroke-width="3" />
+              <path data-edge="3-5" d="M676,362 C592,394 524,416 458,438" fill="none" stroke="rgba(17,167,162,0.18)" stroke-width="3" stroke-dasharray="10 10" />
+              <path data-edge="4-5" d="M528,364 C494,392 468,414 446,434" fill="none" stroke="rgba(20,32,53,0.15)" stroke-width="3" />
+              <path data-edge="5-6" d="M384,500 C372,548 362,586 346,616" fill="none" stroke="rgba(213,157,57,0.30)" stroke-width="4" />
+              <path data-edge="6-7" d="M420,652 C496,648 558,642 632,636" fill="none" stroke="rgba(213,157,57,0.34)" stroke-width="4" />
+              <path data-edge="7-8" d="M698,594 C740,552 772,526 812,500" fill="none" stroke="rgba(213,157,57,0.34)" stroke-width="4" />
+              <path data-edge="8-9" d="M842,454 C826,368 822,308 840,230" fill="none" stroke="rgba(115,92,255,0.28)" stroke-width="4" />
+              <path data-edge="8-10" d="M810,504 C748,466 698,446 650,434" fill="none" stroke="rgba(115,92,255,0.24)" stroke-width="3.5" />
+              <path data-edge="9-10" d="M794,186 C730,266 686,320 636,398" fill="none" stroke="rgba(115,92,255,0.32)" stroke-width="4" />
+              <path data-edge="6-10" d="M392,646 C478,572 538,516 604,448" fill="none" stroke="rgba(20,32,53,0.14)" stroke-width="3" stroke-dasharray="10 10" />
+              <path data-edge="1-10" d="M226,206 C370,286 472,344 598,414" fill="none" stroke="rgba(20,32,53,0.12)" stroke-width="2.5" stroke-dasharray="8 12" />
+            </g>
+          </svg>
+
+          <button class="chapter-node active" data-id="1" data-group="foundation" data-no="1" style="left:118px; top:102px;">
+            <strong>AI Agent 入门</strong>
+            <span>总定义</span>
+          </button>
+          <button class="chapter-node" data-id="2" data-group="core" data-no="2" style="left:520px; top:88px;">
+            <strong>上下文工程</strong>
+            <span>中枢层</span>
+          </button>
+          <button class="chapter-node" data-id="3" data-group="core" data-no="3" style="left:692px; top:258px;">
+            <strong>用户记忆和知识库</strong>
+            <span>连续性层</span>
+          </button>
+          <button class="chapter-node" data-id="4" data-group="core" data-no="4" style="left:514px; top:302px;">
+            <strong>工具</strong>
+            <span>接口层</span>
+          </button>
+          <button class="chapter-node" data-id="5" data-group="core" data-no="5" style="left:300px; top:416px;">
+            <strong>Coding Agent</strong>
+            <span>底座层</span>
+          </button>
+          <button class="chapter-node" data-id="6" data-group="training" data-no="6" style="left:250px; top:568px;">
+            <strong>Agent 的评估</strong>
+            <span>测量层</span>
+          </button>
+          <button class="chapter-node" data-id="7" data-group="training" data-no="7" style="left:618px; top:556px;">
+            <strong>模型后训练</strong>
+            <span>训练层</span>
+          </button>
+          <button class="chapter-node" data-id="8" data-group="training" data-no="8" style="left:800px; top:416px;">
+            <strong>Agent 的自我进化</strong>
+            <span>演化层</span>
+          </button>
+          <button class="chapter-node" data-id="9" data-group="application" data-no="9" style="left:792px; top:124px;">
+            <strong>多模态与实时交互</strong>
+            <span>现实接口层</span>
+          </button>
+          <button class="chapter-node" data-id="10" data-group="application" data-no="10" style="left:596px; top:386px;">
+            <strong>多 Agent 协作</strong>
+            <span>组织层</span>
+          </button>
+        </article>
+
+        <aside class="detail-panel">
+          <article class="detail-card" id="detailCard">
+            <h3 class="detail-title">第 1 章 · AI Agent 入门</h3>
+            <p class="muted">网络身份：定义层原点。整本书的对象边界、术语入口和中心公式都从这里展开。</p>
+            <div class="meta-row">
+              <span class="badge">展区：定义层</span>
+              <span class="badge">类型：起点节点</span>
+              <span class="badge">连接度：高</span>
+            </div>
+            <div class="detail-body" id="detailBody">
+              <p>Agent = LLM + 上下文 + 工具，是整张图的中心坐标。</p>
+              <p>该节点向后分裂出两条主线：一条进入系统构建层，另一条进入行动与协作的扩展层。</p>
+              <p>它不是内容密度最高的节点，但它是所有后续节点的命名基础。</p>
+            </div>
+          </article>
+
+          <article class="stream-card">
+            <strong>线型说明</strong>
+            <p>实线表示直接依赖、局部展开和近距离结构延续。虚线表示远距离呼应、跨层投射或后期回收。</p>
+          </article>
+
+          <article class="stream-card">
+            <strong>图面观察</strong>
+            <p>第 2 章位于中心，第 5 章承担桥梁角色，第 10 章收束多条支线。整本书的网络重心更偏“构建层”，而不是“应用层”。</p>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section id="axes">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">结构坐标系</h2>
+          <p class="section-desc">把全书从“章节顺序”转换为“结构维度”。每张卡片都是一根分析轴，用来观察知识如何分层。</p>
+        </div>
+      </div>
+
+      <div class="axis-grid">
+        <article class="axis-card">
+          <strong>对象轴</strong>
+          <p>从 Agent 本体，到上下文、工具、代码、记忆、评估、训练，再到多主体系统。对象层层外扩。</p>
+        </article>
+        <article class="axis-card">
+          <strong>时间轴</strong>
+          <p>从单次决策点的上下文组织，走向跨会话记忆，再走向持续评估、训练和演化，最后进入长期协作系统。</p>
+        </article>
+        <article class="axis-card">
+          <strong>空间轴</strong>
+          <p>从模型内部决策，扩展到文件系统、工具生态、GUI、语音、机器人和多 Agent 组织空间。</p>
+        </article>
+        <article class="axis-card">
+          <strong>控制轴</strong>
+          <p>从提示与循环控制，走向工具接口、权限边界、评估基准、训练奖励和协作治理。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="themes">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">主题流</h2>
+          <p class="section-desc">这些不是章节标题，而是跨章节反复穿行的母题。它们在图中像暗流一样，把不同展区联结起来。</p>
+        </div>
+      </div>
+
+      <div class="theme-grid">
+        <article class="theme-card">
+          <strong>系统化</strong>
+          <div class="tone-bar"><span style="width: 94%"></span></div>
+          <p>书中持续把 Agent 从“模型能力”转写为“系统能力”。</p>
+        </article>
+        <article class="theme-card">
+          <strong>上下文主导</strong>
+          <div class="tone-bar"><span style="width: 97%"></span></div>
+          <p>上下文组织是整本书里最强的中心张力。</p>
+        </article>
+        <article class="theme-card">
+          <strong>工具化行动</strong>
+          <div class="tone-bar"><span style="width: 88%"></span></div>
+          <p>工具让语言系统进入可执行世界，构成行动接口层。</p>
+        </article>
+        <article class="theme-card">
+          <strong>测量驱动</strong>
+          <div class="tone-bar"><span style="width: 82%"></span></div>
+          <p>评估不是附录，而是训练、优化和演化的前提设施。</p>
+        </article>
+        <article class="theme-card">
+          <strong>权重外增长</strong>
+          <div class="tone-bar"><span style="width: 86%"></span></div>
+          <p>记忆、代码、技能和工具创造组成另一条增长路径。</p>
+        </article>
+        <article class="theme-card">
+          <strong>组织化扩展</strong>
+          <div class="tone-bar"><span style="width: 79%"></span></div>
+          <p>从单体走向多模态、多主体和社会化结构，是末端展区的共同方向。</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">关系流向</h2>
+          <p class="section-desc">用三条长流观察内容迁移：定义如何变成工程，工程如何变成能力，能力如何变成现实系统。</p>
+        </div>
+      </div>
+
+      <div class="stream-grid">
+        <article class="stream-card">
+          <strong>定义 → 构建</strong>
+          <p>第 1 章建立对象定义，第 2–5 章把这个对象工程化，形成上下文、记忆、工具和代码四块主骨架。</p>
+        </article>
+        <article class="stream-card">
+          <strong>构建 → 形成</strong>
+          <p>第 6–8 章不是另起炉灶，而是在既有骨架之上回答“怎样衡量它、训练它、继续增强它”。</p>
+        </article>
+        <article class="stream-card">
+          <strong>形成 → 扩展</strong>
+          <p>第 9–10 章把前面的系统能力投向更复杂环境：实时、多模态、协作、组织和治理。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="catalog">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">章节展墙</h2>
+          <p class="section-desc">每章在这里以展签形式出现。点击卡片可同步激活上方关系网中的对应节点。</p>
+        </div>
+      </div>
+
+      <div class="catalog-grid">
+        <button class="catalog-card chapter-card active" data-target="1"><strong>第 1 章</strong><p>定义中心对象与全书术语入口。</p></button>
+        <button class="catalog-card chapter-card" data-target="2"><strong>第 2 章</strong><p>上下文作为网络中心节点。</p></button>
+        <button class="catalog-card chapter-card" data-target="3"><strong>第 3 章</strong><p>长期连续性与知识检索结构。</p></button>
+        <button class="catalog-card chapter-card" data-target="4"><strong>第 4 章</strong><p>工具接口、权限与异步机制。</p></button>
+        <button class="catalog-card chapter-card" data-target="5"><strong>第 5 章</strong><p>代码、文件系统与能力底座。</p></button>
+        <button class="catalog-card chapter-card" data-target="6"><strong>第 6 章</strong><p>评估基础设施与比较框架。</p></button>
+        <button class="catalog-card chapter-card" data-target="7"><strong>第 7 章</strong><p>后训练、奖励和能力形成。</p></button>
+        <button class="catalog-card chapter-card" data-target="8"><strong>第 8 章</strong><p>经验、技能与自我进化机制。</p></button>
+        <button class="catalog-card chapter-card" data-target="9"><strong>第 9 章</strong><p>语音、GUI 与机器人接口。</p></button>
+        <button class="catalog-card chapter-card" data-target="10"><strong>第 10 章</strong><p>多 Agent 协作与组织结构。</p></button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const chapterData = {
+      1: {
+        title: '第 1 章 · AI Agent 入门',
+        subtitle: '网络身份：定义层原点。整本书的对象边界、术语入口和中心公式都从这里展开。',
+        badges: ['展区：定义层', '类型：起点节点', '连接度：高'],
+        body: [
+          'Agent = LLM + 上下文 + 工具，是整张图的中心坐标。',
+          '该节点向后分裂出两条主线：一条进入系统构建层，另一条进入行动与协作的扩展层。',
+          '它不是内容密度最高的节点，但它是所有后续节点的命名基础。'
+        ]
+      },
+      2: {
+        title: '第 2 章 · 上下文工程',
+        subtitle: '网络身份：构建层中枢。该节点是整张关系网的结构核心。',
+        badges: ['展区：构建层', '类型：中枢节点', '连接度：最高'],
+        body: [
+          '消息结构、工具循环、KV Cache、Prompt、Skills、状态栏和压缩策略在此汇合。',
+          '它向第 3、4、5 章辐射，分别延展为长期知识、工具接口和代码底座。',
+          '在整本书中，这是最强的中心节点。'
+        ]
+      },
+      3: {
+        title: '第 3 章 · 用户记忆和知识库',
+        subtitle: '网络身份：构建层的连续性节点。它把短时上下文扩展到长期结构。',
+        badges: ['展区：构建层', '类型：连续性节点', '连接度：高'],
+        body: [
+          '该节点连接记忆、RAG、索引、治理与 Agentic RAG。',
+          '它不是独立簇，而是对第 2 章的时间向延展。',
+          '向第 8 章投射出“权重之外增长”的一条主线。'
+        ]
+      },
+      4: {
+        title: '第 4 章 · 工具',
+        subtitle: '网络身份：构建层接口节点。它定义系统与外部世界的接触面。',
+        badges: ['展区：构建层', '类型：接口节点', '连接度：高'],
+        body: [
+          '工具分类、粒度、描述、参数保真、安全边界和异步机制都聚在这里。',
+          '该节点一端回接第 1 章的“手脚”，另一端前推到第 9 章的现实行动空间。',
+          '它把静态知识结构转译为可执行能力。'
+        ]
+      },
+      5: {
+        title: '第 5 章 · Coding Agent',
+        subtitle: '网络身份：构建层桥梁节点。它连接工程骨架与后续能力形成层。',
+        badges: ['展区：构建层', '类型：桥梁节点', '连接度：高'],
+        body: [
+          '代码在这里既是执行介质，也是通用适配器和能力放大器。',
+          '该节点向下连接第 6 章评估层，向右连接第 8 章进化层。',
+          '它是整张图中承上启下的重要转接点。'
+        ]
+      },
+      6: {
+        title: '第 6 章 · Agent 的评估',
+        subtitle: '网络身份：形成层入口。这里开始出现“怎样测量系统”的结构视角。',
+        badges: ['展区：形成层', '类型：测量节点', '连接度：中高'],
+        body: [
+          '评估环境、任务数据、指标、Judge、显著性与可观测性在此形成测量框架。',
+          '它是第 7、8 章的基础设施节点。',
+          '该节点把“改进”从经验判断转成可验证结构。'
+        ]
+      },
+      7: {
+        title: '第 7 章 · 模型后训练',
+        subtitle: '网络身份：形成层主节点。它从训练视角刻画能力来源。',
+        badges: ['展区：形成层', '类型：训练节点', '连接度：中高'],
+        body: [
+          '预训练、SFT、RL、多轮奖励和工具学习等内容在此集中。',
+          '它与第 6 章构成“测量—训练”双节点结构。',
+          '并与第 8 章形成“权重内增长—权重外增长”的对照。'
+        ]
+      },
+      8: {
+        title: '第 8 章 · Agent 的自我进化',
+        subtitle: '网络身份：形成层外扩节点。它把能力增长推向系统外部结构。',
+        badges: ['展区：形成层', '类型：演化节点', '连接度：中高'],
+        body: [
+          '经验总结、Skills、提示优化、工具发现和代码创造工具在此汇合。',
+          '它向第 9、10 章投射出更复杂环境中的自适应问题。',
+          '该节点是形成层通向扩展层的重要出口。'
+        ]
+      },
+      9: {
+        title: '第 9 章 · 多模态与实时交互',
+        subtitle: '网络身份：扩展层的现实接口节点。它让系统进入更连续的外部环境。',
+        badges: ['展区：扩展层', '类型：现实接口节点', '连接度：中'],
+        body: [
+          '语音、GUI、机器人控制在此成为新的动作与感知空间。',
+          '它接住第 4 章的工具主线，并把上下文从文本推向多模态流。',
+          '这是书中面向现实世界的主要出口之一。'
+        ]
+      },
+      10: {
+        title: '第 10 章 · 多 Agent 协作',
+        subtitle: '网络身份：扩展层收束节点。多条主线在这里转写为组织结构。',
+        badges: ['展区：扩展层', '类型：收束节点', '连接度：高'],
+        body: [
+          '共享或隔离上下文、协作拓扑、并发冲突、级联错误和治理边界在这里出现。',
+          '它吸收定义层、构建层、形成层的多条主线。',
+          '在整张图里，这是最靠近“系统社会化”的节点。'
+        ]
+      }
+    };
+
+    const nodes = Array.from(document.querySelectorAll('.chapter-node'));
+    const cards = Array.from(document.querySelectorAll('.chapter-card'));
+    const filters = Array.from(document.querySelectorAll('.filter'));
+    const edgePaths = Array.from(document.querySelectorAll('#edges path'));
+    const detailCard = document.getElementById('detailCard');
+    const detailTitle = detailCard.querySelector('.detail-title');
+    const detailSubtitle = detailCard.querySelector('.muted');
+    const detailBody = document.getElementById('detailBody');
+
+    function renderDetail(id) {
+      const item = chapterData[id];
+      if (!item) return;
+      detailTitle.textContent = item.title;
+      detailSubtitle.textContent = item.subtitle;
+      detailCard.querySelector('.meta-row').innerHTML = item.badges.map(text => `<span class="badge">${text}</span>`).join('');
+      detailBody.innerHTML = item.body.map(text => `<p>${text}</p>`).join('');
+      nodes.forEach(node => node.classList.toggle('active', node.dataset.id === String(id)));
+      cards.forEach(card => card.classList.toggle('active', card.dataset.target === String(id)));
+      highlightEdges(String(id));
+    }
+
+    function highlightEdges(id) {
+      edgePaths.forEach(path => {
+        const [a, b] = path.dataset.edge.split('-');
+        const active = a === id || b === id;
+        path.style.opacity = active ? '1' : '0.18';
+        path.style.strokeWidth = active ? '5' : path.getAttribute('stroke-width');
+      });
+    }
+
+    nodes.forEach(node => node.addEventListener('click', () => renderDetail(node.dataset.id)));
+    cards.forEach(card => card.addEventListener('click', () => renderDetail(card.dataset.target)));
+
+    filters.forEach(filter => {
+      filter.addEventListener('click', () => {
+        filters.forEach(btn => btn.classList.toggle('active', btn === filter));
+        const group = filter.dataset.filter;
+        nodes.forEach(node => {
+          const show = group === 'all' || node.dataset.group === group;
+          node.style.display = show ? 'block' : 'none';
+        });
+        edgePaths.forEach(path => {
+          const [a, b] = path.dataset.edge.split('-');
+          const nodeA = nodes.find(node => node.dataset.id === a);
+          const nodeB = nodes.find(node => node.dataset.id === b);
+          const visible = nodeA && nodeB && nodeA.style.display !== 'none' && nodeB.style.display !== 'none';
+          path.style.display = visible ? 'block' : 'none';
+        });
+        const firstVisible = nodes.find(node => node.style.display !== 'none');
+        if (firstVisible) renderDetail(firstVisible.dataset.id);
+      });
+    });
+
+    renderDetail('1');
+  </script>
+</body>
+</html>

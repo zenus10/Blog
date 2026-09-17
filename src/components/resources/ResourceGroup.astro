@@ -1,0 +1,244 @@
+---
+import type { ResolvedResourceGroup } from '@/utils/resources'
+import { resourceKindLabels } from '@/utils/resources'
+
+interface Props {
+  group: ResolvedResourceGroup
+  headingLevel?: 'h2' | 'h3'
+}
+
+const { group, headingLevel = 'h2' } = Astro.props
+const Heading = headingLevel
+const {
+  entry: {
+    id,
+    data: { title, description }
+  },
+  items
+} = group
+---
+
+<section id={`resource-${id}`} class='scroll-mt-24'>
+  <header class='resource-group__header'>
+    <div>
+      <p class='resource-group__eyebrow'>Collection {id}</p>
+      <Heading class='resource-group__title'>{title}</Heading>
+      {description && <p class='resource-group__description'>{description}</p>}
+    </div>
+    <span class='resource-group__count'>{items.length} 项</span>
+  </header>
+
+  <ol class='resource-group__list'>
+    {
+      items.map((item, index) => {
+        const isExternal = /^https?:\/\//.test(item.href)
+        const anchorIndex = item.href.indexOf('#')
+        const itemId = anchorIndex >= 0 ? item.href.slice(anchorIndex + 1) : undefined
+
+        return (
+          <li id={itemId} class='resource-item scroll-mt-24'>
+            <span class='resource-item__number'>{String(index + 1).padStart(2, '0')}</span>
+            <div class='resource-item__body'>
+              <div class='resource-item__heading'>
+                <div class='min-w-0'>
+                  <a
+                    href={item.href}
+                    class='resource-item__link'
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    data-astro-prefetch={!isExternal}
+                  >
+                    {item.title}
+                    {isExternal && <span aria-hidden='true'> ↗</span>}
+                  </a>
+                </div>
+                <span class='resource-item__kind'>{resourceKindLabels[item.kind]}</span>
+              </div>
+              <p class='resource-item__description'>{item.description}</p>
+              {item.prompt && (
+                <details class='resource-item__prompt'>
+                  <summary>
+                    <span class='resource-item__prompt-open'>查看 Prompt</span>
+                    <span class='resource-item__prompt-close'>收起 Prompt</span>
+                  </summary>
+                  <pre>
+                    <code>{item.prompt}</code>
+                  </pre>
+                </details>
+              )}
+            </div>
+          </li>
+        )
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .resource-group__header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid hsl(var(--foreground) / 0.85);
+    padding-top: 1rem;
+  }
+
+  .resource-group__eyebrow {
+    margin: 0 0 0.35rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-group__title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .resource-group__description {
+    max-width: 42rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-group__count,
+  .resource-item__number {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-group__count {
+    flex: none;
+    padding-bottom: 0.15rem;
+    font-size: 0.75rem;
+  }
+
+  .resource-group__list {
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resource-item {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: 1.1rem;
+  }
+
+  .resource-item__number {
+    padding-top: 0.2rem;
+    font-size: 0.7rem;
+  }
+
+  .resource-item__body {
+    min-width: 0;
+  }
+
+  .resource-item__heading {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .resource-item__link {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+
+  .resource-item__link:hover {
+    color: hsl(var(--primary));
+  }
+
+  .resource-item__kind {
+    flex: none;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.65rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-item__description {
+    margin: 0.3rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-item__prompt {
+    margin-top: 0.85rem;
+    border-inline-start: 2px solid hsl(var(--border));
+    padding-inline-start: 0.85rem;
+  }
+
+  .resource-item__prompt summary {
+    width: fit-content;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: hsl(var(--foreground));
+  }
+
+  .resource-item__prompt-close {
+    display: none;
+  }
+
+  .resource-item__prompt[open] .resource-item__prompt-open {
+    display: none;
+  }
+
+  .resource-item__prompt[open] .resource-item__prompt-close {
+    display: inline;
+  }
+
+  .resource-item__prompt pre {
+    max-height: 24rem;
+    margin: 0.75rem 0 0;
+    overflow: auto;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    background: hsl(var(--muted) / 0.35);
+    padding: 0.75rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    line-height: 1.65;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .resource-item__link:focus-visible,
+  .resource-item__prompt summary:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.6);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .resource-group__header {
+      align-items: start;
+    }
+
+    .resource-item__heading {
+      align-items: start;
+      gap: 0.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .resource-item__link {
+      transition: none;
+    }
+  }
+</style>

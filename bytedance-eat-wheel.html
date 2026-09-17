@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>字节今天吃什么</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg-top: #fff8ed;
+        --bg-bottom: #f5ecd9;
+        --panel: rgba(255, 249, 238, 0.88);
+        --panel-strong: rgba(255, 251, 244, 0.96);
+        --line: rgba(103, 76, 48, 0.18);
+        --text: #24150e;
+        --muted: #5f5348;
+        --accent: #f26a2e;
+        --accent-deep: #7a2f11;
+        --accent-violet: #7a5cfa;
+        --accent-gold: #ffcf7a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top, rgba(242, 106, 46, 0.16), transparent 35%),
+          linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 22px 0 40px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero,
+      .card,
+      .roadmap {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow: 0 24px 60px rgba(84, 61, 34, 0.08);
+        backdrop-filter: blur(14px);
+      }
+
+      .hero {
+        display: grid;
+        gap: 22px;
+        align-items: center;
+        border-radius: 30px;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 18px 18px auto;
+        width: 92px;
+        height: 92px;
+        border-radius: 999px;
+        border: 1px dashed rgba(134, 99, 59, 0.28);
+        pointer-events: none;
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: 16px;
+        z-index: 1;
+      }
+
+      .eyebrow,
+      .card-kicker,
+      .status-label,
+      .schema-label {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 12px;
+        color: #8d6b49;
+      }
+
+      h1,
+      h2,
+      h3,
+      strong,
+      .wheel-hub,
+      .building-chip,
+      .primary-btn,
+      .ghost-btn,
+      .upload-btn {
+        font-family: "Arial Rounded MT Bold", Inter, "PingFang SC", sans-serif;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(44px, 8vw, 84px);
+        line-height: 0.92;
+        letter-spacing: -0.05em;
+        color: #26160d;
+        max-width: 8ch;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .hero-text,
+      .roadmap p,
+      .helper-text,
+      .ticket-meta,
+      .candidate-place {
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .hero-actions,
+      .import-actions,
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .primary-btn,
+      .ghost-btn,
+      .upload-btn,
+      .field-select {
+        appearance: none;
+        border-radius: 999px;
+        border: 1px solid #8a5a31;
+        min-height: 46px;
+        padding: 12px 18px;
+        cursor: pointer;
+        transition:
+          transform 180ms ease,
+          background-color 180ms ease,
+          color 180ms ease,
+          border-color 180ms ease;
+      }
+
+      .primary-btn {
+        background: linear-gradient(135deg, #2f2017 0%, #7a2f11 48%, #f26a2e 100%);
+        color: #fff8ef;
+        font-weight: 800;
+        box-shadow: 0 14px 24px rgba(146, 66, 28, 0.22);
+      }
+
+      .ghost-btn,
+      .upload-btn,
+      .field-select {
+        background: rgba(255, 248, 238, 0.9);
+        color: #4f3422;
+        font-weight: 700;
+      }
+
+      .ghost-btn.small {
+        min-height: 42px;
+        padding-inline: 16px;
+      }
+
+      .primary-btn:hover,
+      .ghost-btn:hover,
+      .upload-btn:hover,
+      .building-chip:hover,
+      .field-select:hover {
+        transform: translateY(-1px);
+      }
+
+      .primary-btn:disabled {
+        opacity: 0.65;
+        cursor: wait;
+        transform: none;
+      }
+
+      .status-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        padding: 15px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, rgba(255, 241, 224, 0.9), rgba(252, 231, 206, 0.78));
+        border: 1px solid rgba(158, 118, 76, 0.16);
+      }
+
+      .status-strip div {
+        display: grid;
+        gap: 4px;
+      }
+
+      .status-strip strong {
+        color: #2f2017;
+        font-size: 17px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .wheel-stage {
+        display: grid;
+        place-items: center;
+        position: relative;
+        min-height: 420px;
+        padding: 10px 4px 4px;
+      }
+
+      .wheel-shell {
+        width: min(100%, 500px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        position: relative;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 244, 226, 0.95) 0 18%, rgba(229, 188, 140, 0.36) 19%, rgba(255, 247, 236, 0.18) 58%, transparent 60%),
+          linear-gradient(145deg, rgba(164, 123, 80, 0.28), rgba(255, 255, 255, 0.5));
+        box-shadow:
+          inset 0 0 0 1px rgba(125, 90, 49, 0.14),
+          0 30px 60px rgba(85, 52, 22, 0.18);
+      }
+
+      .wheel-face {
+        width: min(100%, 468px);
+        aspect-ratio: 1;
+        transition: transform 4.2s cubic-bezier(0.14, 1, 0.22, 1);
+        filter: drop-shadow(0 18px 30px rgba(75, 52, 28, 0.18));
+      }
+
+      .wheel-hub {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #fff6e7 0%, #f6d4ae 100%);
+        border: 6px solid #2f2017;
+        color: #5f230e;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        box-shadow: 0 12px 20px rgba(70, 43, 20, 0.15);
+      }
+
+      .wheel-pointer {
+        position: absolute;
+        top: -4px;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 112px;
+        pointer-events: none;
+      }
+
+      .wheel-pointer::before,
+      .wheel-pointer::after,
+      .wheel-pointer span {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 7px;
+        height: 72px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #4a2e1c 0%, #c4844e 100%);
+        box-shadow: 0 6px 14px rgba(74, 46, 28, 0.2);
+        transform-origin: bottom center;
+      }
+
+      .wheel-pointer::before {
+        transform: rotate(-13deg);
+      }
+
+      .wheel-pointer::after {
+        transform: rotate(13deg);
+      }
+
+      .wheel-pointer span {
+        height: 85px;
+        transform: rotate(0deg);
+      }
+
+      .grid-2 {
+        display: grid;
+        gap: 16px;
+      }
+
+      .card,
+      .roadmap {
+        border-radius: 28px;
+        padding: 20px;
+      }
+
+      .card-heading {
+        display: grid;
+        gap: 5px;
+        margin-bottom: 16px;
+      }
+
+      .card-heading h2,
+      .result-ticket h3,
+      .candidate-item h3 {
+        margin: 0;
+        color: #24150e;
+        line-height: 1.1;
+      }
+
+      .building-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .building-chip {
+        border: 1px solid rgba(124, 89, 51, 0.26);
+        border-radius: 999px;
+        background: #fff7ea;
+        color: #5c3921;
+        min-height: 40px;
+        padding: 8px 15px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          background-color 180ms ease,
+          border-color 180ms ease,
+          color 180ms ease,
+          transform 180ms ease;
+      }
+
+      .building-chip.active {
+        background: linear-gradient(135deg, #f26a2e, #7a5cfa);
+        border-color: transparent;
+        color: #fff8f0;
+        box-shadow: 0 12px 20px rgba(112, 77, 202, 0.18);
+      }
+
+      .field-label {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6d5847;
+        font-size: 14px;
+      }
+
+      .field-select {
+        width: 100%;
+      }
+
+      .upload-btn {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-btn input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .json-input {
+        width: 100%;
+        min-height: 208px;
+        border-radius: 20px;
+        border: 1px dashed rgba(136, 100, 60, 0.34);
+        background: rgba(255, 252, 246, 0.9);
+        padding: 16px;
+        resize: vertical;
+        color: #37251a;
+        font-family: "SFMono-Regular", "JetBrains Mono", "Fira Code", monospace;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .helper-text[data-tone="success"] {
+        color: #0d7a59;
+      }
+
+      .helper-text[data-tone="error"] {
+        color: #bc2d2d;
+      }
+
+      .result-ticket {
+        display: grid;
+        gap: 12px;
+        padding: 20px;
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(255, 251, 244, 0.98), rgba(252, 233, 204, 0.95)),
+          repeating-linear-gradient(90deg, transparent 0 17px, rgba(145, 112, 77, 0.08) 17px 18px);
+        border: 1px solid rgba(121, 85, 48, 0.18);
+        min-height: 256px;
+        align-content: start;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      }
+
+      .ticket-building,
+      .ticket-price {
+        color: #7a3215;
+        font-weight: 800;
+      }
+
+      .ticket-price {
+        font-size: 24px;
+        color: #222;
+      }
+
+      .ticket-tags,
+      .candidate-tags,
+      .schema-board {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .ticket-tags span,
+      .candidate-tags span,
+      .schema-board > div {
+        border-radius: 999px;
+        padding: 6px 12px;
+        background: rgba(255, 247, 237, 0.92);
+        border: 1px solid rgba(135, 98, 57, 0.18);
+        color: #5d4530;
+        font-size: 13px;
+      }
+
+      .candidate-list {
+        display: grid;
+        gap: 12px;
+        max-height: 560px;
+        overflow: auto;
+        padding-right: 4px;
+      }
+
+      .candidate-empty {
+        display: grid;
+        gap: 5px;
+        place-items: start;
+        min-height: 180px;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 250, 243, 0.88);
+        border: 1px dashed rgba(136, 100, 60, 0.34);
+        color: #6a5748;
+      }
+
+      .candidate-item {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 18px;
+        background: var(--panel-strong);
+        border: 1px solid rgba(136, 100, 60, 0.13);
+      }
+
+      .candidate-meta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .candidate-meta strong {
+        color: #342218;
+        font-size: 16px;
+      }
+
+      .schema-board {
+        margin-top: 16px;
+      }
+
+      .schema-board > div {
+        display: grid;
+        gap: 2px;
+        min-width: min(100%, 160px);
+        padding: 11px 14px;
+        border-radius: 18px;
+      }
+
+      .schema-board strong {
+        color: #2d2116;
+        font-size: 15px;
+      }
+
+      .primary-btn:focus-visible,
+      .ghost-btn:focus-visible,
+      .upload-btn:focus-visible,
+      .building-chip:focus-visible,
+      .field-select:focus-visible,
+      .json-input:focus-visible {
+        outline: 3px solid rgba(122, 92, 250, 0.32);
+        outline-offset: 3px;
+      }
+
+      @media (min-width: 920px) {
+        .hero {
+          grid-template-columns: minmax(0, 1.1fr) minmax(24rem, 0.9fr);
+          padding: 28px;
+        }
+
+        .grid-2 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          width: min(100% - 18px, 100%);
+          gap: 14px;
+          padding-top: 14px;
+        }
+
+        .hero,
+        .card,
+        .roadmap {
+          border-radius: 22px;
+        }
+
+        h1 {
+          max-width: 100%;
+        }
+
+        .status-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .wheel-stage {
+          min-height: 340px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .primary-btn,
+        .ghost-btn,
+        .upload-btn,
+        .building-chip,
+        .field-select,
+        .wheel-face {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Byte canteen roulette</p>
+          <h1>字节今天吃什么</h1>
+          <p class="hero-text">
+            先按楼宇缩小范围，再让转盘替你做决定。这个原型先支持 JSON 导入，后面可以把字节餐厅小程序的数据接到同一套结构里。
+          </p>
+
+          <div class="hero-actions">
+            <button class="primary-btn" id="spin-action" type="button">转一次，今天就吃它</button>
+            <button class="ghost-btn" id="load-sample" type="button">载入示例菜单</button>
+          </div>
+
+          <div class="status-strip" aria-live="polite">
+            <div>
+              <span class="status-label">当前楼宇</span>
+              <strong id="current-building">全部楼宇</strong>
+            </div>
+            <div>
+              <span class="status-label">候选菜品</span>
+              <strong id="candidate-count">0</strong>
+            </div>
+            <div>
+              <span class="status-label">随机结果</span>
+              <strong id="result-brief">等待开转</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="wheel-stage">
+          <div class="wheel-pointer" aria-hidden="true"><span></span></div>
+          <div class="wheel-shell">
+            <div class="wheel-face" id="wheel-face">
+              <svg id="wheel-svg" viewBox="0 0 520 520" role="img" aria-label="午餐随机转盘"></svg>
+            </div>
+            <div class="wheel-hub">午饭</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <article class="card">
+          <div class="card-heading">
+            <p class="card-kicker">01 / 楼宇过滤</p>
+            <h2>先决定你今天在哪栋楼吃</h2>
+          </div>
+          <div class="building-chips" id="building-chips"></div>
+          <label class="field-label" for="building-select">或使用下拉选择</label>
+          <select id="building-select" class="field-select"></select>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <p class="card-kicker">02 / 菜单导入</p>
+            <h2>先接 JSON，后面再接小程序</h2>
+          </div>
+
+          <div class="import-actions">
+            <label class="upload-btn">
+              <input id="file-input" type="file" accept=".json,application/json" />
+              上传 JSON 文件
+            </label>
+            <button class="ghost-btn small" id="apply-json" type="button">导入下方文本</button>
+          </div>
+
+          <textarea
+            id="json-input"
+            class="json-input"
+            spellcheck="false"
+            placeholder='粘贴 JSON 数组，例如：[{"building":"A座","restaurant":"一食堂","stall":"面档","dish":"番茄肥牛面"}]'
+          ></textarea>
+
+          <p class="helper-text" id="import-message">
+            支持字段：building、restaurant、stall、dish、tags、price。也兼容 campus、canteen、window、name 这类近义字段。
+          </p>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="card">
+          <div class="card-heading">
+            <p class="card-kicker">03 / 今日结果</p>
+            <h2>别纠结，先吃到嘴里</h2>
+          </div>
+
+          <div class="result-ticket empty" id="result-ticket">
+            <p class="ticket-building">等待转盘</p>
+            <h3>载入菜单后，按下“转一次”</h3>
+            <p class="ticket-meta">这里会显示楼宇、餐厅、档口、标签和价格。</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <p class="card-kicker">04 / 候选池</p>
+            <h2>当前楼宇可选菜单</h2>
+          </div>
+
+          <div class="candidate-list" id="candidate-list"></div>
+        </article>
+      </section>
+
+      <section class="roadmap">
+        <div class="card-heading">
+          <p class="card-kicker">下一步 / 接字节餐厅小程序</p>
+          <h2>原型已经把导入层留出来了</h2>
+        </div>
+        <p>
+          这版先用统一 JSON 结构跑通“分楼宇 + 随机转盘”。后续如果你要接字节餐厅小程序，建议优先研究它是否有稳定的接口返回菜品、楼宇和窗口信息；如果能拿到接口响应，就把结果映射成同样的字段结构直接灌进来。如果小程序接口做了强登录、签名或频控，再退一步做手动导出或半自动同步，会比直接硬爬更稳。
+        </p>
+        <div class="schema-board">
+          <div><span class="schema-label">building</span><strong>楼宇</strong></div>
+          <div><span class="schema-label">restaurant</span><strong>餐厅</strong></div>
+          <div><span class="schema-label">stall</span><strong>档口</strong></div>
+          <div><span class="schema-label">dish</span><strong>菜品名</strong></div>
+          <div><span class="schema-label">tags</span><strong>标签数组</strong></div>
+          <div><span class="schema-label">price</span><strong>价格</strong></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const sampleData = [
+        { building: "研发园区 A 座", restaurant: "A座食堂", stall: "现炒档", dish: "黑椒牛柳意面", tags: ["热菜", "快手"], price: "32" },
+        { building: "研发园区 A 座", restaurant: "A座食堂", stall: "轻食档", dish: "香煎鸡胸羽衣甘蓝碗", tags: ["轻食", "高蛋白"], price: "29" },
+        { building: "研发园区 A 座", restaurant: "A座食堂", stall: "粉面档", dish: "番茄肥牛米线", tags: ["汤面", "热门"], price: "26" },
+        { building: "研发园区 A 座", restaurant: "A座食堂", stall: "盖饭档", dish: "照烧鸡腿饭", tags: ["盖饭"], price: "24" },
+        { building: "创意园区 B 座", restaurant: "B座员工餐厅", stall: "铁板档", dish: "铁板香辣虾滑乌冬", tags: ["铁板", "微辣"], price: "31" },
+        { building: "创意园区 B 座", restaurant: "B座员工餐厅", stall: "小碗菜", dish: "芋儿烧鸡套餐", tags: ["川味", "套餐"], price: "28" },
+        { building: "创意园区 B 座", restaurant: "B座员工餐厅", stall: "烧腊档", dish: "蜜汁叉烧双拼饭", tags: ["烧腊"], price: "27" },
+        { building: "创意园区 B 座", restaurant: "B座员工餐厅", stall: "轻食吧", dish: "牛油果谷物能量碗", tags: ["轻食", "沙拉"], price: "30" },
+        { building: "内容中心 C 座", restaurant: "C座餐吧", stall: "砂锅档", dish: "菌菇腊味煲仔饭", tags: ["砂锅", "限定"], price: "25" },
+        { building: "内容中心 C 座", restaurant: "C座餐吧", stall: "面点档", dish: "藤椒鸡丝拌面", tags: ["拌面", "微麻"], price: "23" },
+        { building: "内容中心 C 座", restaurant: "C座餐吧", stall: "西式简餐", dish: "奶油蘑菇鸡排饭", tags: ["西式", "热门"], price: "30" },
+        { building: "内容中心 C 座", restaurant: "C座餐吧", stall: "汤饭档", dish: "酸汤肥牛泡饭", tags: ["汤饭", "酸辣"], price: "27" }
+      ]
+
+      const palette = ["#F26A2E", "#FF9F1C", "#FFD166", "#06A77D", "#118AB2", "#7A5CFA", "#EF476F", "#4D5156"]
+
+      const state = {
+        sourceData: [],
+        filteredData: [],
+        buildings: [],
+        selectedBuilding: "all",
+        currentRotation: 0,
+        spinning: false,
+        lastResult: null,
+      }
+
+      const nodes = {
+        wheelFace: document.getElementById("wheel-face"),
+        wheelSvg: document.getElementById("wheel-svg"),
+        spinAction: document.getElementById("spin-action"),
+        loadSample: document.getElementById("load-sample"),
+        buildingChips: document.getElementById("building-chips"),
+        buildingSelect: document.getElementById("building-select"),
+        candidateList: document.getElementById("candidate-list"),
+        candidateCount: document.getElementById("candidate-count"),
+        currentBuilding: document.getElementById("current-building"),
+        resultBrief: document.getElementById("result-brief"),
+        resultTicket: document.getElementById("result-ticket"),
+        jsonInput: document.getElementById("json-input"),
+        applyJson: document.getElementById("apply-json"),
+        importMessage: document.getElementById("import-message"),
+        fileInput: document.getElementById("file-input"),
+      }
+
+      function splitTags(tags) {
+        if (Array.isArray(tags)) return tags.filter(Boolean).map(String)
+        if (typeof tags === "string") {
+          return tags
+            .split(/[、,，|/]/)
+            .map((item) => item.trim())
+            .filter(Boolean)
+        }
+        return []
+      }
+
+      function normalizeRecord(record) {
+        if (!record || typeof record !== "object") return null
+
+        const normalized = {
+          building: String(record.building ?? record.campus ?? record.location ?? record.site ?? "未分楼宇").trim(),
+          restaurant: String(record.restaurant ?? record.canteen ?? record.cafeteria ?? "未标注餐厅").trim(),
+          stall: String(record.stall ?? record.window ?? record.counter ?? "未标注档口").trim(),
+          dish: String(record.dish ?? record.name ?? record.title ?? "").trim(),
+          tags: splitTags(record.tags ?? record.labels ?? record.tag),
+          price: record.price == null || record.price === "" ? "" : String(record.price).trim(),
+        }
+
+        if (!normalized.dish) return null
+        return normalized
+      }
+
+      function setImportMessage(message, tone = "muted") {
+        nodes.importMessage.textContent = message
+        nodes.importMessage.dataset.tone = tone
+      }
+
+      function loadData(records, sourceLabel = "新数据") {
+        const normalized = records.map(normalizeRecord).filter(Boolean)
+        if (!normalized.length) {
+          setImportMessage("没有识别到有效菜品。请检查 JSON 是否为数组，并至少包含 dish/name 字段。", "error")
+          return
+        }
+
+        state.sourceData = normalized
+        state.selectedBuilding = "all"
+        state.lastResult = null
+        state.currentRotation = 0
+        nodes.wheelFace.style.transform = "rotate(0deg)"
+        setImportMessage(`已导入 ${normalized.length} 条菜品，来源：${sourceLabel}。`, "success")
+        renderAll()
+      }
+
+      function getBuildings() {
+        return Array.from(new Set(state.sourceData.map((item) => item.building))).sort((a, b) => a.localeCompare(b, "zh-Hans-CN"))
+      }
+
+      function applyFilter() {
+        state.buildings = getBuildings()
+        state.filteredData =
+          state.selectedBuilding === "all"
+            ? [...state.sourceData]
+            : state.sourceData.filter((item) => item.building === state.selectedBuilding)
+      }
+
+      function formatPrice(price) {
+        return price ? `¥${price}` : "价格待补充"
+      }
+
+      function truncate(text, length = 12) {
+        return text.length > length ? `${text.slice(0, length)}…` : text
+      }
+
+      function polarToCartesian(cx, cy, radius, angle) {
+        const radians = ((angle - 90) * Math.PI) / 180
+        return { x: cx + radius * Math.cos(radians), y: cy + radius * Math.sin(radians) }
+      }
+
+      function describeSector(cx, cy, radius, startAngle, endAngle) {
+        const start = polarToCartesian(cx, cy, radius, endAngle)
+        const end = polarToCartesian(cx, cy, radius, startAngle)
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1"
+        return `M ${cx} ${cy} L ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`
+      }
+
+      function renderWheel() {
+        const items = state.filteredData
+        const svg = nodes.wheelSvg
+        svg.innerHTML = ""
+
+        if (!items.length) {
+          svg.innerHTML = `
+            <circle cx="260" cy="260" r="220" fill="#F7EEDF"></circle>
+            <circle cx="260" cy="260" r="185" fill="#FFF8EC" stroke="#D8C4A8" stroke-width="2" stroke-dasharray="10 8"></circle>
+            <text x="260" y="238" text-anchor="middle" fill="#6C6257" font-size="24" font-weight="700">先导入菜单</text>
+            <text x="260" y="278" text-anchor="middle" fill="#8A7F71" font-size="14">支持 JSON 文件或粘贴 JSON 数组</text>
+          `
+          return
+        }
+
+        const slice = 360 / items.length
+        const center = 260
+        const radius = 220
+
+        items.forEach((item, index) => {
+          const startAngle = index * slice
+          const endAngle = (index + 1) * slice
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path")
+          path.setAttribute("d", describeSector(center, center, radius, startAngle, endAngle))
+          path.setAttribute("fill", palette[index % palette.length])
+          path.setAttribute("stroke", "#FFF6E9")
+          path.setAttribute("stroke-width", "3")
+          svg.appendChild(path)
+
+          const labelAngle = startAngle + slice / 2
+          const labelPoint = polarToCartesian(center, center, radius * 0.66, labelAngle)
+          const text = document.createElementNS("http://www.w3.org/2000/svg", "text")
+          text.setAttribute("x", String(labelPoint.x))
+          text.setAttribute("y", String(labelPoint.y))
+          text.setAttribute("fill", "#FFF8EE")
+          text.setAttribute("font-size", items.length > 10 ? "11" : "13")
+          text.setAttribute("font-weight", "700")
+          text.setAttribute("text-anchor", "middle")
+          text.setAttribute("dominant-baseline", "middle")
+          text.setAttribute("transform", `rotate(${labelAngle} ${labelPoint.x} ${labelPoint.y})`)
+          text.textContent = truncate(item.dish, items.length > 10 ? 8 : 12)
+          svg.appendChild(text)
+        })
+
+        const innerRing = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        innerRing.setAttribute("cx", "260")
+        innerRing.setAttribute("cy", "260")
+        innerRing.setAttribute("r", "76")
+        innerRing.setAttribute("fill", "#FFF8EC")
+        innerRing.setAttribute("stroke", "#3B332B")
+        innerRing.setAttribute("stroke-width", "5")
+        svg.appendChild(innerRing)
+
+        const centerTextTop = document.createElementNS("http://www.w3.org/2000/svg", "text")
+        centerTextTop.setAttribute("x", "260")
+        centerTextTop.setAttribute("y", "245")
+        centerTextTop.setAttribute("text-anchor", "middle")
+        centerTextTop.setAttribute("fill", "#6B2B10")
+        centerTextTop.setAttribute("font-size", "13")
+        centerTextTop.setAttribute("font-weight", "700")
+        centerTextTop.textContent = state.selectedBuilding === "all" ? "全部楼宇" : state.selectedBuilding
+        svg.appendChild(centerTextTop)
+
+        const centerTextBottom = document.createElementNS("http://www.w3.org/2000/svg", "text")
+        centerTextBottom.setAttribute("x", "260")
+        centerTextBottom.setAttribute("y", "278")
+        centerTextBottom.setAttribute("text-anchor", "middle")
+        centerTextBottom.setAttribute("fill", "#2D241C")
+        centerTextBottom.setAttribute("font-size", "24")
+        centerTextBottom.setAttribute("font-weight", "900")
+        centerTextBottom.textContent = `${items.length} 选 1`
+        svg.appendChild(centerTextBottom)
+      }
+
+      function renderBuildingControls() {
+        const options = ["all", ...state.buildings]
+        nodes.buildingSelect.innerHTML = options
+          .map((building) => {
+            const label = building === "all" ? "全部楼宇" : building
+            return `<option value="${building}">${label}</option>`
+          })
+          .join("")
+        nodes.buildingSelect.value = state.selectedBuilding
+
+        nodes.buildingChips.innerHTML = options
+          .map((building) => {
+            const label = building === "all" ? "全部楼宇" : building
+            const active = state.selectedBuilding === building
+            return `<button class="building-chip${active ? " active" : ""}" data-building="${building}" type="button">${label}</button>`
+          })
+          .join("")
+      }
+
+      function renderCandidateList() {
+        if (!state.filteredData.length) {
+          nodes.candidateList.innerHTML = `
+            <div class="candidate-empty">
+              <strong>还没有候选菜品</strong>
+              <p>先载入示例菜单，或者自己导入一份 JSON。</p>
+            </div>
+          `
+          return
+        }
+
+        nodes.candidateList.innerHTML = state.filteredData
+          .map((item) => {
+            const tags = item.tags.length ? item.tags.map((tag) => `<span>${tag}</span>`).join("") : "<span>待补标签</span>"
+            return `
+              <article class="candidate-item">
+                <div>
+                  <p class="candidate-place">${item.building} · ${item.restaurant} · ${item.stall}</p>
+                  <h3>${item.dish}</h3>
+                </div>
+                <div class="candidate-meta">
+                  <div class="candidate-tags">${tags}</div>
+                  <strong>${formatPrice(item.price)}</strong>
+                </div>
+              </article>
+            `
+          })
+          .join("")
+      }
+
+      function renderResultTicket() {
+        if (!state.lastResult) {
+          nodes.resultTicket.className = "result-ticket empty"
+          nodes.resultTicket.innerHTML = `
+            <p class="ticket-building">等待转盘</p>
+            <h3>载入菜单后，按下“转一次”</h3>
+            <p class="ticket-meta">这里会显示楼宇、餐厅、档口、标签和价格。</p>
+          `
+          nodes.resultBrief.textContent = "等待开转"
+          return
+        }
+
+        const item = state.lastResult
+        nodes.resultTicket.className = "result-ticket"
+        nodes.resultTicket.innerHTML = `
+          <p class="ticket-building">${item.building}</p>
+          <h3>${item.dish}</h3>
+          <p class="ticket-meta">${item.restaurant} · ${item.stall}</p>
+          <div class="ticket-tags">
+            ${item.tags.length ? item.tags.map((tag) => `<span>${tag}</span>`).join("") : "<span>待补标签</span>"}
+          </div>
+          <p class="ticket-price">${formatPrice(item.price)}</p>
+        `
+        nodes.resultBrief.textContent = item.dish
+      }
+
+      function renderSummary() {
+        nodes.currentBuilding.textContent = state.selectedBuilding === "all" ? "全部楼宇" : state.selectedBuilding
+        nodes.candidateCount.textContent = String(state.filteredData.length)
+      }
+
+      function renderAll() {
+        applyFilter()
+        renderBuildingControls()
+        renderCandidateList()
+        renderResultTicket()
+        renderSummary()
+        renderWheel()
+      }
+
+      function chooseRandomItem() {
+        if (state.spinning || !state.filteredData.length) return
+        state.spinning = true
+        nodes.spinAction.disabled = true
+
+        const selectedIndex = Math.floor(Math.random() * state.filteredData.length)
+        const selectedItem = state.filteredData[selectedIndex]
+        const sector = 360 / state.filteredData.length
+        const spins = 6 + Math.floor(Math.random() * 4)
+        state.currentRotation += spins * 360 - selectedIndex * sector - sector / 2
+        nodes.wheelFace.style.transform = `rotate(${state.currentRotation}deg)`
+
+        window.setTimeout(() => {
+          state.lastResult = selectedItem
+          renderResultTicket()
+          state.spinning = false
+          nodes.spinAction.disabled = false
+        }, 4300)
+      }
+
+      function handleManualImport() {
+        try {
+          const parsed = JSON.parse(nodes.jsonInput.value)
+          loadData(Array.isArray(parsed) ? parsed : [], "手动粘贴 JSON")
+        } catch (error) {
+          setImportMessage("JSON 解析失败，请检查逗号、引号和数组格式。", "error")
+        }
+      }
+
+      function handleFileImport(event) {
+        const [file] = event.target.files || []
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(String(reader.result || "[]"))
+            loadData(Array.isArray(parsed) ? parsed : [], `文件 ${file.name}`)
+          } catch (error) {
+            setImportMessage(`文件 ${file.name} 不是有效 JSON。`, "error")
+          }
+        }
+        reader.readAsText(file, "utf-8")
+      }
+
+      function bindEvents() {
+        nodes.spinAction.addEventListener("click", chooseRandomItem)
+        nodes.loadSample.addEventListener("click", () => loadData(sampleData, "内置示例菜单"))
+        nodes.applyJson.addEventListener("click", handleManualImport)
+        nodes.fileInput.addEventListener("change", handleFileImport)
+        nodes.buildingSelect.addEventListener("change", (event) => {
+          state.selectedBuilding = event.target.value
+          state.lastResult = null
+          renderAll()
+        })
+        nodes.buildingChips.addEventListener("click", (event) => {
+          const target = event.target.closest("[data-building]")
+          if (!target) return
+          state.selectedBuilding = target.dataset.building
+          state.lastResult = null
+          renderAll()
+        })
+      }
+
+      bindEvents()
+      loadData(sampleData, "内置示例菜单")
+    </script>
+  </body>
+</html>

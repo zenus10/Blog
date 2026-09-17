@@ -1,0 +1,172 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  books: CollectionEntry<'books'>[]
+}
+
+const { books } = Astro.props
+---
+
+<section id='books' class='scroll-mt-24'>
+  <header class='book-archive__header'>
+    <div>
+      <p class='book-archive__eyebrow'>Reading archive</p>
+      <h2 class='book-archive__title'>Books</h2>
+      <p class='book-archive__description'>喜欢的书、书摘与已经整理的阅读资源。</p>
+    </div>
+    <span class='book-archive__meta'>{books.length} 本</span>
+  </header>
+
+  <ul class='book-archive__grid'>
+    {
+      books.map((book) => {
+        const { title, author, dynasty, description, coverImage, type, favorite } = book.data
+
+        return (
+          <li>
+            <a href={`/books/${book.id}`} class='book-card group' data-astro-prefetch>
+              <span class='book-card__cover'>
+                {coverImage ? (
+                  <Image
+                    src={coverImage.src}
+                    alt={coverImage.alt || title}
+                    class='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
+                    loading='lazy'
+                  />
+                ) : (
+                  <span class='flex h-full items-center justify-center text-lg font-semibold text-muted-foreground'>
+                    {title.charAt(0)}
+                  </span>
+                )}
+              </span>
+
+              <span class='min-w-0'>
+                <span class='flex flex-wrap items-center gap-1.5'>
+                  <span class='font-medium transition-colors group-hover:text-primary'>
+                    {title}
+                  </span>
+                  {favorite && <span class='book-card__label'>喜欢</span>}
+                  {type === 'curated' && <span class='book-card__label'>已整理</span>}
+                </span>
+                <span class='mt-1 block text-xs text-muted-foreground'>
+                  {dynasty ? `【${dynasty}】${author}` : author}
+                </span>
+                <span class='mt-1 line-clamp-2 block text-sm leading-5 text-muted-foreground'>
+                  {description}
+                </span>
+              </span>
+            </a>
+          </li>
+        )
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  #books {
+    border-top: 1px solid hsl(var(--foreground) / 0.85);
+    padding-top: 1rem;
+  }
+
+  .book-archive__header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .book-archive__eyebrow,
+  .book-archive__meta {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.7rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .book-archive__eyebrow {
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .book-archive__title {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .book-archive__description {
+    margin: 1rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .book-archive__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .book-card {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.85rem;
+    min-width: 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.6rem;
+    padding: 0.65rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .book-card:hover {
+    border-color: hsl(var(--foreground) / 0.25);
+    background: hsl(var(--muted) / 0.4);
+  }
+
+  .book-card__cover {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 0.35rem;
+    background: hsl(var(--muted));
+  }
+
+  .book-card__label {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.65rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .book-card:focus-visible {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.5);
+  }
+
+  @media (min-width: 640px) {
+    .book-archive__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .book-card,
+    img,
+    .book-card span {
+      transition: none;
+    }
+  }
+</style>

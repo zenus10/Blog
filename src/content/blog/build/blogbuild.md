@@ -1,5 +1,5 @@
 ---
-title: 'The Blog'
+title: '基于Astro与netlify的博客搭建过程'
 publishDate: 2025-10-13
 description: '详细记录使用Astro框架和Pure Theme搭建个人博客，并通过GitHub和Netlify完成自动化部署的完整建站过程'
 tags:

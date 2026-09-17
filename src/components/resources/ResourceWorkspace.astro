@@ -1,0 +1,177 @@
+---
+interface ResourceNavItem {
+  id: string
+  title: string
+  count: number
+}
+
+interface Props {
+  items: ResourceNavItem[]
+  activeId: string
+  bookCount: number
+}
+
+const { items, activeId, bookCount } = Astro.props
+---
+
+<div class='resource-workspace'>
+  <nav class='resource-directory resource-directory--mobile' aria-label='资源目录'>
+    {
+      items.map((item) => (
+        <a href={`/resources/${item.id}`} aria-current={activeId === item.id ? 'page' : undefined}>
+          {item.title}
+        </a>
+      ))
+    }
+    <a
+      class='resource-directory__books'
+      href='/resources/books'
+      aria-current={activeId === 'books' ? 'page' : undefined}
+    >
+      Books
+    </a>
+  </nav>
+
+  <aside class='resource-directory resource-directory--desktop' aria-label='资源目录'>
+    <p class='resource-directory__label'>INDEX</p>
+    <ol>
+      {
+        items.map((item, index) => (
+          <li>
+            <a
+              href={`/resources/${item.id}`}
+              aria-current={activeId === item.id ? 'page' : undefined}
+            >
+              <span class='resource-directory__number'>{String(index + 1).padStart(2, '0')}</span>
+              <span>{item.title}</span>
+              <span class='resource-directory__count'>{item.count}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+    <a
+      class='resource-directory__books'
+      href='/resources/books'
+      aria-current={activeId === 'books' ? 'page' : undefined}
+    >
+      <span class='resource-directory__number'>{String(items.length + 1).padStart(2, '0')}</span>
+      <span>Books</span>
+      <span class='resource-directory__count'>{bookCount}</span>
+    </a>
+  </aside>
+
+  <div class='resource-workspace__content'><slot /></div>
+</div>
+
+<style>
+  .resource-workspace {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .resource-directory {
+    font-size: 0.875rem;
+  }
+
+  .resource-directory--mobile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 1rem;
+  }
+
+  .resource-directory a {
+    color: hsl(var(--muted-foreground));
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .resource-directory a:hover {
+    color: hsl(var(--foreground));
+  }
+
+  .resource-directory a[aria-current='page'] {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+
+  .resource-directory--desktop {
+    display: none;
+  }
+
+  .resource-workspace__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .resource-workspace__content {
+    min-width: 0;
+  }
+
+  @media (min-width: 768px) {
+    .resource-workspace {
+      grid-template-columns: minmax(10rem, 0.34fr) minmax(0, 1fr);
+      align-items: start;
+      gap: 3.5rem;
+    }
+
+    .resource-directory--mobile {
+      display: none;
+    }
+
+    .resource-directory--desktop {
+      position: sticky;
+      top: 6rem;
+      display: block;
+      border-inline-end: 1px solid hsl(var(--border));
+      padding-inline-end: 1.5rem;
+    }
+
+    .resource-directory__label {
+      margin: 0 0 1rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .resource-directory ol {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .resource-directory li a,
+    .resource-directory__books {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr) auto;
+      gap: 0.5rem;
+      align-items: baseline;
+      padding-block: 0.45rem;
+    }
+
+    .resource-directory__number,
+    .resource-directory__count {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.7rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .resource-directory__count {
+      text-align: end;
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .resource-directory a {
+      transition: none;
+    }
+  }
+</style>

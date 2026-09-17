@@ -66,4 +66,32 @@ const books = defineCollection({
     })
 })
 
-export const collections = { blog, books }
+// 定义 resources collection
+const resources = defineCollection({
+  loader: glob({ base: './src/content/resources', pattern: '**/*.{md,mdx}' }),
+  schema: () =>
+    z.object({
+      title: z.string().min(1).max(60),
+      description: z.string().max(160).optional(),
+      order: z.number().int().nonnegative().default(0),
+      draft: z.boolean().default(false),
+      items: z
+        .array(
+          z.object({
+            title: z.string().min(1),
+            href: z
+              .string()
+              .refine(
+                (value) => value.startsWith('/') || /^https?:\/\//.test(value),
+                '资源链接必须是 http(s) URL 或以 / 开头的站内路径'
+              ),
+            description: z.string().min(1),
+            kind: z.enum(['website', 'document', 'tool', 'course', 'other']).default('website'),
+            prompt: z.string().min(1).optional()
+          })
+        )
+        .default([])
+    })
+})
+
+export const collections = { blog, books, resources }

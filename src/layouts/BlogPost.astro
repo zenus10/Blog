@@ -76,15 +76,13 @@ const jsonLd = {
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
-  <Hero {data} {remarkPluginFrontmatter} slot='header'>
-    <Fragment slot='description'> </Fragment>
-  </Hero>
+  <Hero {data} {remarkPluginFrontmatter} slot='header' />
 
   <slot />
 
   <Fragment slot='bottom'>
     {/* Copyright */}
-    <Copyright {data} />
+    <Copyright {data} class='article-copyright' />
     {/* Article recommend */}
     <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
   </Fragment>
@@ -92,6 +90,25 @@ const jsonLd = {
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
 </PageLayout>
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<script type='application/ld+json' set:html={JSON.stringify(jsonLd)} />
 
 {integ.mediumZoom.enable && <MediumZoom />}
+
+<style>
+  :global(.article-copyright) {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  :global(.article-copyright > .flex.flex-col),
+  :global(.article-copyright > .flex.flex-col > .text-sm) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :global(.article-copyright > .flex.flex-col > .text-sm) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+</style>

@@ -21,7 +21,7 @@ const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#bfb0a0'>
+<PageLayout meta={{ title: 'Home' }} highlightColor='#aeaaaa'>
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image
@@ -128,7 +128,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <ProjectCard
             href='https://github.com/zenus10/PreUser'
             heading='PreUser'
-            subheading='GitHub'
+            subheading='模拟用户的multi- agent'
             imagePath='/src/assets/projects/preuser.png'
           />
           <ProjectCard
@@ -136,6 +136,12 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             heading='prompt-ab-test'
             subheading='Prompt A/B Testing Tool'
             imagePath='/src/assets/projects/prompt-ab-test.png'
+          />
+          <ProjectCard
+            href='https://note.zenus10.com/'
+            heading='Note'
+            subheading='本地笔记应用'
+            imagePath='/src/assets/projects/note.png'
           />
         </div>
       </Section>

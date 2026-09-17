@@ -1,0 +1,98 @@
+[
+  {
+    "building": "研发园区 A 座",
+    "restaurant": "A座食堂",
+    "stall": "现炒档",
+    "dish": "黑椒牛柳意面",
+    "tags": ["热菜", "快手"],
+    "price": "32"
+  },
+  {
+    "building": "研发园区 A 座",
+    "restaurant": "A座食堂",
+    "stall": "轻食档",
+    "dish": "香煎鸡胸羽衣甘蓝碗",
+    "tags": ["轻食", "高蛋白"],
+    "price": "29"
+  },
+  {
+    "building": "研发园区 A 座",
+    "restaurant": "A座食堂",
+    "stall": "粉面档",
+    "dish": "番茄肥牛米线",
+    "tags": ["汤面", "热门"],
+    "price": "26"
+  },
+  {
+    "building": "研发园区 A 座",
+    "restaurant": "A座食堂",
+    "stall": "盖饭档",
+    "dish": "照烧鸡腿饭",
+    "tags": ["盖饭"],
+    "price": "24"
+  },
+  {
+    "building": "创意园区 B 座",
+    "restaurant": "B座员工餐厅",
+    "stall": "铁板档",
+    "dish": "铁板香辣虾滑乌冬",
+    "tags": ["铁板", "微辣"],
+    "price": "31"
+  },
+  {
+    "building": "创意园区 B 座",
+    "restaurant": "B座员工餐厅",
+    "stall": "小碗菜",
+    "dish": "芋儿烧鸡套餐",
+    "tags": ["川味", "套餐"],
+    "price": "28"
+  },
+  {
+    "building": "创意园区 B 座",
+    "restaurant": "B座员工餐厅",
+    "stall": "烧腊档",
+    "dish": "蜜汁叉烧双拼饭",
+    "tags": ["烧腊"],
+    "price": "27"
+  },
+  {
+    "building": "创意园区 B 座",
+    "restaurant": "B座员工餐厅",
+    "stall": "轻食吧",
+    "dish": "牛油果谷物能量碗",
+    "tags": ["轻食", "沙拉"],
+    "price": "30"
+  },
+  {
+    "building": "内容中心 C 座",
+    "restaurant": "C座餐吧",
+    "stall": "砂锅档",
+    "dish": "菌菇腊味煲仔饭",
+    "tags": ["砂锅", "限定"],
+    "price": "25"
+  },
+  {
+    "building": "内容中心 C 座",
+    "restaurant": "C座餐吧",
+    "stall": "面点档",
+    "dish": "藤椒鸡丝拌面",
+    "tags": ["拌面", "微麻"],
+    "price": "23"
+  },
+  {
+    "building": "内容中心 C 座",
+    "restaurant": "C座餐吧",
+    "stall": "西式简餐",
+    "dish": "奶油蘑菇鸡排饭",
+    "tags": ["西式", "热门"],
+    "price": "30"
+  },
+  {
+    "building": "内容中心 C 座",
+    "restaurant": "C座餐吧",
+    "stall": "汤饭档",
+    "dish": "酸汤肥牛泡饭",
+    "tags": ["汤饭", "酸辣"],
+    "price": "27"
+  }
+]
